@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:timewise/pages/loginpage/login.dart';
+import 'package:timewise/pages/loginpage/splashscreen.dart';
 
 
 
@@ -28,7 +29,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: Colors.blue[900],
       ),
-      home: LoginPage(),
+      home: const SplashScreen(),
     );
   }
 }

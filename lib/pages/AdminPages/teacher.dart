@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../loginpage/login.dart';
+import '../loginpage/splashscreen.dart';
 import 'model.dart';
 
 class Teacher extends StatefulWidget {
@@ -102,6 +104,10 @@ class _TeacherState extends State<Teacher> {
   }
 
   Future<void> logout(BuildContext context) async {
+
+    SharedPreferences sharedPref = await SharedPreferences.getInstance();
+    await sharedPref.setBool(SplashScreenState.KEY_LOGIN, false);
+
     await FirebaseAuth.instance.signOut();
 
     Navigator.of(context).pushReplacement(

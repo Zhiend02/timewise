@@ -2,8 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import '../AdminPages/home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:timewise/pages/loginpage/splashscreen.dart';
+import '../AdminPages/home.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -213,7 +214,7 @@ class _LoginPageState extends State<LoginPage> {
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                               ),
-                              onPressed: () {
+                              onPressed: () async {
                                 signIn(emailController.text, passwordController.text);
                               },
                               child: const Text(
@@ -250,7 +251,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void signIn(String email, String password) async {
+  void  signIn(String email, String password) async {
     if (_formkey.currentState!.validate()) {
       setState(() {
         visible = true; // Show CircularProgressIndicator
@@ -263,8 +264,8 @@ class _LoginPageState extends State<LoginPage> {
           password: password,
         );
 
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        await prefs.setBool('isLoggedIn', true);
+          var sharedPref = await SharedPreferences.getInstance();
+          sharedPref.setBool(SplashScreenState.KEY_LOGIN, true);
 
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()));
       } on FirebaseAuthException catch (e) {
@@ -293,3 +294,4 @@ class _LoginPageState extends State<LoginPage> {
   }
 
 }
+

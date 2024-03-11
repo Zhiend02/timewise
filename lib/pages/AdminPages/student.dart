@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../loginpage/login.dart';
+import '../loginpage/splashscreen.dart';
 import 'model.dart';
 
 class Student extends StatefulWidget {
@@ -62,10 +63,10 @@ class _StudentState extends State<Student> {
   }
 
   Future<void> logout(BuildContext context) async {
-    CircularProgressIndicator();
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    // await prefs.remove('isLoggedIn');
-    await prefs.setBool('isLoggedIn', false);
+    const CircularProgressIndicator();
+
+    SharedPreferences sharedPref = await SharedPreferences.getInstance();
+    await sharedPref.setBool(SplashScreenState.KEY_LOGIN, false);
     await FirebaseAuth.instance.signOut();
 
     Navigator.of(context).pushReplacement(

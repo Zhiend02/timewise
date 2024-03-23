@@ -17,9 +17,27 @@ class SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Timer(Duration(seconds: 3), () {
-      whereToGo();
-    });
+    checkLoginStatus(); // Check login status during splash screen
+  }
+
+  Future<void> checkLoginStatus() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool isLoggedIn = prefs.getBool(KEY_LOGIN) ?? false;
+
+    // Simulate data loading process
+    await Future.delayed(Duration(seconds: 5)); // Example delay
+
+    if (isLoggedIn) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HomePage()),
+      );
+    } else {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => LoginPage()),
+      );
+    }
   }
 
   @override
@@ -27,31 +45,10 @@ class SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       body: Container(
         color: Colors.blue,
+        child: Center(
+          child: CircularProgressIndicator(), // Show loading indicator
+        ),
       ),
     );
-  }
-
-  void whereToGo() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool isLoggedIn = prefs.getBool(KEY_LOGIN) ?? false;
-    if(isLoggedIn != null) {
-      if (isLoggedIn) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => HomePage()),
-        );
-      } else {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => LoginPage()),
-        );
-      }
-    }else{
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => LoginPage()),
-      );
-    }
-
   }
 }

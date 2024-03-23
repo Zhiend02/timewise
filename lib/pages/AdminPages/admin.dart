@@ -1,12 +1,9 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timewise/pages/AdminPages/StudentListPage.dart';
 import 'package:timewise/pages/loginpage/register.dart';
-import '../loginpage/login.dart';
-import '../loginpage/splashscreen.dart';
+import '../loginpage/logoutpage.dart';
 import 'model.dart';
 
 class Admin extends StatefulWidget {
@@ -82,17 +79,5 @@ class _AdminState extends State<Admin> {
     );
   }
 
-  Future<void> logout(BuildContext context) async {
-    const CircularProgressIndicator();
 
-    SharedPreferences sharedPref = await SharedPreferences.getInstance();
-    await sharedPref.setBool(SplashScreenState.KEY_LOGIN, false);
-    await FirebaseAuth.instance.signOut();
-
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(
-        builder: (context) => LoginPage(),
-      ),
-    );
-  }
 }

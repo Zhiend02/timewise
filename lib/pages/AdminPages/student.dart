@@ -1,10 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-import '../loginpage/login.dart';
-import '../loginpage/splashscreen.dart';
+import '../loginpage/logoutpage.dart';
 import 'model.dart';
 
 class Student extends StatefulWidget {
@@ -62,17 +58,5 @@ class _StudentState extends State<Student> {
     );
   }
 
-  Future<void> logout(BuildContext context) async {
-    const CircularProgressIndicator();
 
-    SharedPreferences sharedPref = await SharedPreferences.getInstance();
-    await sharedPref.setBool(SplashScreenState.KEY_LOGIN, false);
-    await FirebaseAuth.instance.signOut();
-
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(
-        builder: (context) => LoginPage(),
-      ),
-    );
-  }
 }

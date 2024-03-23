@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class UserModel {
   String? email;
   String? role;
@@ -31,5 +33,39 @@ class UserModel {
       'middleName': middleName,
       'lastName': lastName,
     };
+  }
+}
+
+
+
+class AttendanceService {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  Future<void> storeAttendanceData({
+    required String date,
+    required String time,
+    required int duration,
+    required String session,
+    required String lectureType,
+    required String subject,
+    required List<String> presentStudents,
+    required List<String> absentStudents,
+  }) async {
+    try {
+      // Add a new document to the 'attendance_records' collection
+      await _firestore.collection('attendance_records').add({
+        'date': date,
+        'time': time,
+        'duration': duration,
+        'session': session,
+        'lectureType': lectureType,
+        'subject': subject,
+        'presentStudents': presentStudents,
+        'absentStudents': absentStudents,
+      });
+    } catch (e) {
+      // Handle errors here
+      print('Error storing attendance data: $e');
+    }
   }
 }

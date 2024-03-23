@@ -47,11 +47,6 @@ class _StudentListPageState extends State<StudentListPage> {
                   var student = studentDocs[index];
                   var fullName =
                       '${student['firstName']} ${student['middleName']} ${student['lastName']}';
-                  return ListTile(
-                    title: Text(fullName),
-                    subtitle: Text(student['email']),
-                    trailing: Text(student['role']),
-                  );
                 },
               );
             } else {

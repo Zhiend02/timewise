@@ -1,22 +1,34 @@
 
 import 'package:flutter/material.dart';
-
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter_nearby_connections/flutter_nearby_connections.dart';
+import 'package:permission_handler/permission_handler.dart';
 
+import 'login.dart';
 
-
-class startNearbyShare extends StatefulWidget {
-  const startNearbyShare({Key? key}) : super(key: key);
-  @override
-  State<startNearbyShare> createState() => _startNearbyShareState();
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences preferences = await SharedPreferences.getInstance();
+  var name = preferences.getString('name');
+  print(name);
+  runApp(MaterialApp(
+    theme: ThemeData.dark(),
+    home: name == null ? const Login() : const MyHomePagehost(),
+    debugShowCheckedModeBanner: false,
+  ));
 }
 
-class _startNearbyShareState extends State<startNearbyShare> {
+class MyHomePagehost extends StatefulWidget {
+  const MyHomePagehost({Key? key}) : super(key: key);
+  @override
+  State<MyHomePagehost> createState() => _MyHomePagehostState();
+}
+
+class _MyHomePagehostState extends State<MyHomePagehost> {
   Icon buticon = const Icon(Icons.bluetooth);
   String button = 'Start';
   String name = '';
@@ -24,10 +36,23 @@ class _startNearbyShareState extends State<startNearbyShare> {
   final Future<SharedPreferences> prefs = SharedPreferences.getInstance();
 
   onClick() {
-    _onButtonClicked(devices.first);
+    if (devices.isNotEmpty) {
+      _onButtonClicked(devices.first);
+    } else {
+      // Handle the case when devices list is empty
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('No devices available')),
+      );
+    }
   }
 
-
+  logout() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove('name');
+    prefs.remove('email');
+    Navigator.pushReplacement(context,
+        MaterialPageRoute(builder: (BuildContext ctx) => const Login()));
+  }
 
   List<Device> devices = [];
   List<Device> connectedDevices = [];
@@ -37,9 +62,30 @@ class _startNearbyShareState extends State<startNearbyShare> {
 
   bool isInit = false;
 
+  void requestPermissions() async {
+    // Request Bluetooth permission
+    var bluetoothStatus = await Permission.bluetooth.request();
+    if (bluetoothStatus != PermissionStatus.granted) {
+      // Handle denied Bluetooth permission
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Bluetooth permission denied')),
+      );
+    }
+
+    // Request Location permission
+    var locationStatus = await Permission.locationWhenInUse.request();
+    if (locationStatus != PermissionStatus.granted) {
+      // Handle denied Location permission
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Location permission denied')),
+      );
+    }
+  }
+
   @override
   void initState() {
     super.initState();
+    requestPermissions();
     init();
   }
 
@@ -52,6 +98,13 @@ class _startNearbyShareState extends State<startNearbyShare> {
     super.dispose();
   }
 
+  // _onTabItemListener(Device device) async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   final erno = prefs.getString('erno');
+  //   if (device.state == SessionState.connected) {
+  //     nearbyService.sendMessage(device.deviceId, erno!);
+  //   }
+  // }
 
   int getItemCount() {
     return connectedDevices.length;
@@ -103,6 +156,7 @@ class _startNearbyShareState extends State<startNearbyShare> {
           devicesList.forEach((element) {
             print(
                 " deviceId: ${element.deviceId} | deviceName: ${element.deviceName} | state: ${element.state}");
+            devices.add(element);
 
             if (Platform.isAndroid) {
               if (element.state == SessionState.connected) {
@@ -119,6 +173,14 @@ class _startNearbyShareState extends State<startNearbyShare> {
           connectedDevices.clear();
           connectedDevices.addAll(
               devicesList.where((d) => d.state == SessionState.connected).toList());
+
+
+          // Print the list of discovered devices
+          print("Discovered Devices:");
+          devicesList.forEach((device) {
+            print("Device ID: ${device.deviceId}, Device Name: ${device.deviceName}, State: ${device.state}");
+          });
+
         });
 
     receivedDataSubscription =
@@ -138,16 +200,33 @@ class _startNearbyShareState extends State<startNearbyShare> {
             'Track Attendance',
 
           ),
+          actions: [
+            MaterialButton(
+              onPressed: logout,
+              child: Row(children: [
+                Icon(Icons.logout),
+                SizedBox(width: size.width * 0.03),
+                Text(
+                  'Logout',
+
+                )
+              ]),
+            )
+          ],
         ),
         body: Center(
           child: SingleChildScrollView(
             child: Column(children: [
               Padding(
                 padding: EdgeInsets.all(size.width * 0.03),
-                child: Text('Welcome, '),),
+                child: Text('Welcome, ',
+                   ),
+              ),
               Padding(
                 padding: EdgeInsets.all(size.width * 0.03),
-                child: const Text('Click the button below to start collecting Attendance'),),
+                child: const Text(
+                    'Click the button below to start collecting Attendance'),
+              ),
               SizedBox(
                 height: size.height * 0.1,
               ),

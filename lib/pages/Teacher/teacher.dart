@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:timewise/pages/attendance/attendance.dart';
+import 'package:timewise/pages/attendance/login.dart';
 import '../loginpage/logoutpage.dart';
-import 'model.dart';
+import '../AdminPages/model.dart';
 
 class Teacher extends StatefulWidget {
   String id;
@@ -26,6 +27,7 @@ class _TeacherState extends State<Teacher> {
     loadUserData();
   }
 
+
   void loadUserData() async {
     final docSnapshot = await FirebaseFirestore.instance
         .collection("users")
@@ -45,23 +47,47 @@ class _TeacherState extends State<Teacher> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Teacher",),
+        title: const Text("Teacher",),
         actions: [
           IconButton(
             onPressed: () {
               logout(context);
             },
-            icon: Icon(Icons.logout),
+            icon: const Icon(Icons.logout),
           ),
         ],
       ),
       body: Center(
-        child: ElevatedButton(
-          onPressed: () {Navigator.push(context, MaterialPageRoute(builder: (context) => const Attendance()),);},
-            child: const Text("Take Attendance"),),
+        child: Column(
+          children: [
+            ElevatedButton(
+              onPressed: () {Navigator.push(context, MaterialPageRoute(builder: (context) => const Attendance()),);},
+                child: const Text("Take Attendance"),),
+
+            ElevatedButton(
+              onPressed: () {Navigator.push(context, MaterialPageRoute(builder: (context) =>   const Login()),);},
+              child: const Text("Take Attendance"),),
+          ],
+        ),
             ),
             );
   }
 
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

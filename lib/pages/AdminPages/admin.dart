@@ -63,7 +63,7 @@ class _AdminState extends State<Admin> {
             ElevatedButton(onPressed: (){
               Navigator.push(context, MaterialPageRoute(builder: (context) => StudentListPage(),));},
 
-                child: const Text("student list")),
+                child: const Text("Student list")),
 
             ElevatedButton(onPressed: (){
               Navigator.push(context, MaterialPageRoute(builder: (context) => Register(),));},

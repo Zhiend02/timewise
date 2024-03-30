@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:timewise/pages/loginpage/AdditionalDetailsPage.dart';
-import 'login.dart';
 import '../AdminPages/model.dart';
 
 class Register extends StatefulWidget {
@@ -214,27 +213,16 @@ class _RegisterState extends State<Register> {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             MaterialButton(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius:
+                              shape: const RoundedRectangleBorder(borderRadius:
                                       BorderRadius.all(Radius.circular(20.0))),
                               elevation: 5.0,
                               height: 40,
                               onPressed: () {
                                 const CircularProgressIndicator(color: Colors.red,);
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => LoginPage(),
-                                  ),
-                                );
+                                Navigator.pop(context);
                               },
                               color: Colors.white,
-                              child: const Text(
-                                "Login",
-                                style: TextStyle(
-                                  fontSize: 20,
-                                ),
-                              ),
+                              child: const Text("Back", style: TextStyle(fontSize: 20,),),
                             ),
                             MaterialButton(
                               shape: const RoundedRectangleBorder(

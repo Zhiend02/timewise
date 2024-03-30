@@ -57,10 +57,11 @@ class _AdditionalDetailsPageState extends State<AdditionalDetailsPage> {
     // Get user ID
     String userId = widget.userId;
 
-    // Get the entered values
-    String firstName = firstNameController.text;
-    String middleName = middleNameController.text;
-    String lastName = lastNameController.text;
+
+    // Convert to lowercase
+    String firstName = firstNameController.text.toLowerCase();
+    String middleName = middleNameController.text.toLowerCase();
+    String lastName = lastNameController.text.toLowerCase();
 
     // Update user details in Firestore
     await firebaseFirestore.collection('users').doc(userId).update({
@@ -70,9 +71,6 @@ class _AdditionalDetailsPageState extends State<AdditionalDetailsPage> {
     });
 
     // Navigate back to the register page
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => Register()),
-    );
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Register()),);
   }
 }

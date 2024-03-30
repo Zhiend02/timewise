@@ -258,14 +258,21 @@ class _LoginPageState extends State<LoginPage> {
       });
 
       try {
-        UserCredential userCredential =
-        await FirebaseAuth.instance.signInWithEmailAndPassword(
+        UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: email,
           password: password,
         );
 
           var sharedPref = await SharedPreferences.getInstance();
           sharedPref.setBool(SplashScreenState.KEY_LOGIN, true);
+
+        // Get the user's document ID from Firestore
+        String userId = userCredential.user!.uid; // Assuming Firestore uses UID as document ID
+
+        sharedPref.setString('user_id', userId); // Store the user's document ID with key 'user_id'
+
+        // Print the user's document ID
+        print('User Document ID: $userId');
 
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()));
       } on FirebaseAuthException catch (e) {

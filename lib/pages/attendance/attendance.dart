@@ -37,27 +37,34 @@ class _AttendanceState extends State<Attendance> {
 
 
   void takeAttendance() {
-    // Navigate to the attendance list page and pass required parameters
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => AttendanceListPage(
-          date: selectedDate.toString().substring(0, 10), // Pass selected date
-          time: selectedTime.format(context), // Pass selected time
-          duration: selectedDuration, // Pass selected duration
-          session: session!, // Pass session
-          lectureType: lectureType!, // Pass lecture type
+    if (session != null && lectureType != null && subject != null) {
+      Navigator.push(context, MaterialPageRoute(builder: (context) => AttendanceListPage(
+            date: selectedDate.toString().substring(0, 10), // Pass  date
+            time: selectedTime.format(context), // Pass  time
+            duration: selectedDuration, // Pass  duration
+            session: session!, // Pass session
+            lectureType: lectureType!, // Pass lecture type
+          ),
         ),
-      ),
-    );
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please select all the fields.'), duration: Duration(seconds: 2),
+        ),
+      );
+    }
   }
 
 
   @override
   Widget build(BuildContext context) {
+    Color buttonColor = (session != null && lectureType != null && subject != null)
+        ? Colors.green
+        : Colors.grey; // Set button color based on field selection
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Attendance'),
+        title: const Text('Attendance'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -66,9 +73,7 @@ class _AttendanceState extends State<Attendance> {
           children: [
             DropdownButtonFormField<String>(
               value: session,
-              hint: Text('Select Session'),
-              onChanged: (value) {
-                setState(() {
+              hint: const Text('Select Session'), onChanged: (value) {setState(() {
                   session = value;
                   lectureType = null; // Reset lecture type when session changes
                   subject = null; // Reset subject when session changes
@@ -83,7 +88,7 @@ class _AttendanceState extends State<Attendance> {
             ),
             DropdownButtonFormField<String>(
               value: lectureType,
-              hint: Text('Select Lecture Type'),
+              hint: const Text('Select Lecture Type'),
               onChanged: isLectureTypeEnabled() ? (value) {
                 setState(() {
                   lectureType = value;
@@ -99,7 +104,7 @@ class _AttendanceState extends State<Attendance> {
             ),
             DropdownButtonFormField<String>(
               value: subject,
-              hint: Text('Select Subject'),
+              hint: const Text('Select Subject'),
               onChanged: isSubjectEnabled() ? (value) {
                 setState(() {
                   subject = value;
@@ -107,7 +112,7 @@ class _AttendanceState extends State<Attendance> {
               } : null,
               items: getSubjectList(),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -126,11 +131,11 @@ class _AttendanceState extends State<Attendance> {
                       });
                     }
                   },
-                  child: Text('Select Date'),
+                  child: const Text('Select Date'),
                 ),
               ],
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -147,11 +152,11 @@ class _AttendanceState extends State<Attendance> {
                       });
                     }
                   },
-                  child: Text('Select Time'),
+                  child: const Text('Select Time'),
                 ),
               ],
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -172,7 +177,10 @@ class _AttendanceState extends State<Attendance> {
 
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: takeAttendance,
+              onPressed: (buttonColor == Colors.grey) ? null : takeAttendance,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: buttonColor,
+              ),
               child: const Text('Take Attendance'),
             ),
           ],

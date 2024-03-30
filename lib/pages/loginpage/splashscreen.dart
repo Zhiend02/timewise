@@ -24,19 +24,13 @@ class SplashScreenState extends State<SplashScreen> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool isLoggedIn = prefs.getBool(KEY_LOGIN) ?? false;
 
-    // Simulate data loading process
-    await Future.delayed(Duration(seconds: 5)); // Example delay
+    // Simulating data loading process
+    await Future.delayed(const Duration(seconds: 5));
 
     if (isLoggedIn) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => HomePage()),
-      );
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()),);
     } else {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => LoginPage()),
-      );
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage()),);
     }
   }
 
@@ -46,7 +40,16 @@ class SplashScreenState extends State<SplashScreen> {
       body: Container(
         color: Colors.blue,
         child: Center(
-          child: CircularProgressIndicator(), // Show loading indicator
+          child: Container(
+              height: 45,
+              width: 45,
+              decoration: const BoxDecoration(
+              image: DecorationImage(
+              image: AssetImage('assets/images/Triple intersection.gif'),
+              fit: BoxFit.fill
+    ),
+              ),
+    ),
         ),
       ),
     );

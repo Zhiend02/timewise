@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 
 import 'admin.dart';
 import 'model.dart';
-import 'student.dart';
-import 'teacher.dart';
+import '../Student/student.dart';
+import '../Teacher/teacher.dart';
 
 class HomePage extends StatefulWidget {
   @override

@@ -15,9 +15,9 @@ class _StudentListPageState extends State<StudentListPage> {
     super.initState();
     _studentStream = FirebaseFirestore.instance
         .collection('users')
-        .orderBy('lastName', descending: false) // Ensure ascending order by last name
-        .orderBy('firstName', descending: false) // Then by first name
-        .orderBy('middleName', descending: false) // Then by middle name
+        .orderBy('lastName') // Ensure ascending order by last name
+        .orderBy('firstName') // Then by first name
+        .orderBy('middleName') // Then by middle name
         .snapshots();
   }
 

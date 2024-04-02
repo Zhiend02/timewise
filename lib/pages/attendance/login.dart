@@ -31,14 +31,12 @@ class _Login extends State<Login> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return (Scaffold(
-      appBar: AppBar(title: Text('Login')),
+      appBar: AppBar(title:const Text('Login')),
       body: Center(
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Text(
-                'Login',
-              ),
+             const Text('Login',),
               SizedBox(
                 height: size.height * 0.04,
               ),
@@ -80,10 +78,6 @@ class _Login extends State<Login> {
                   ]),
                 ),
               ),
-              // MaterialButton(
-              //   onPressed: show,
-              //   child: Text('abcd'),
-              // )
             ],
           ),
         ),

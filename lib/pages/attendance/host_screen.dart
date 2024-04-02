@@ -144,11 +144,14 @@ class _MyHomePagehostState extends State<MyHomePagehost> {
         strategy: Strategy.P2P_STAR,
         callback: (isRunning) async {
           if (isRunning) {
+            print("Service running");
             await nearbyService.stopAdvertisingPeer();
             await nearbyService.stopBrowsingForPeers();
             await Future.delayed(Duration(microseconds: 200));
             await nearbyService.startAdvertisingPeer();
             await nearbyService.startBrowsingForPeers();
+          } else {
+            print("Service not running");
           }
         });
     subscription =

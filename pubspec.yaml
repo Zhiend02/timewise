@@ -34,23 +34,31 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.6
+  # for firebase
   firebase_core: ^2.25.4
   firebase_auth: ^4.17.4
   cloud_firestore: ^4.15.4
-  animated_notch_bottom_bar: ^1.0.1
-  flutter_svg: ^2.0.9
-  animate_do: ^3.3.3
+
+
   shared_preferences: ^2.2.2
-  fluttertoast: ^8.2.4
   flutter_p2p_connection: ^1.0.3
   permission_handler: ^10.4.5
   connectivity_plus: ^6.0.1
   flutter_nearby_connections: ^1.1.2
   device_info_plus: ^9.1.2
-  flutter_styled_toast: ^2.2.1
+
+  #  for the UI/UX
+  mirai_dropdown_menu: ^0.0.8+2
   animations: ^2.0.11
-  another_flutter_splash_screen: ^1.2.0
+  fluttertoast: ^8.2.4
+  flutter_svg: ^2.0.9
+  animate_do: ^3.3.3
+  animated_notch_bottom_bar: ^1.0.1
+  cupertino_icons: ^1.0.6
+  flutter_styled_toast: ^2.2.1
+  easy_date_timeline: ^1.0.3
+  bottom_bar_page_transition: ^2.0.0
+
 
 
 

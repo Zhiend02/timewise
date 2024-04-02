@@ -7,6 +7,7 @@ class AttendanceListPage extends StatefulWidget {
   final int duration;
   final String session;
   final String lectureType;
+  final String subject;
 
   AttendanceListPage({
     required this.date,
@@ -14,6 +15,7 @@ class AttendanceListPage extends StatefulWidget {
     required this.duration,
     required this.session,
     required this.lectureType,
+    required this.subject,
   });
 
   @override
@@ -21,11 +23,12 @@ class AttendanceListPage extends StatefulWidget {
 }
 
 class _AttendanceListPageState extends State<AttendanceListPage> {
+  TextEditingController searchController = TextEditingController();
   late Stream<QuerySnapshot> _studentStream;
   List<String> rollNumbers = [];
   Map<String, String> attendanceStatusMap = {}; // Map to store attendance status ('P' for present, 'A' for absent)
-  TextEditingController searchController = TextEditingController();
-  List<DocumentSnapshot> filteredStudents = [];
+
+  String? _selectedBulkUpdate;
 
   @override
   void initState() {
@@ -36,23 +39,6 @@ class _AttendanceListPageState extends State<AttendanceListPage> {
         .orderBy('firstName')
         .orderBy('middleName')
         .snapshots();
-  }
-
-  void searchStudents(String searchQuery) {
-    filteredStudents.clear();
-    if (searchQuery.isNotEmpty) {
-      _studentStream.listen((snapshot) {
-        var studentDocs = snapshot.docs.where((doc) => doc['role'] == 'Student').toList();
-        for (var student in studentDocs) {
-          String fullName = '${student['firstName']} ${student['middleName']} ${student['lastName']}';
-          if (fullName.toLowerCase().contains(searchQuery.toLowerCase()) ||
-              student['rollNo'].toString().contains(searchQuery)) {
-            filteredStudents.add(student);
-          }
-        }
-        setState(() {});
-      });
-    }
   }
 
   void toggleAttendance(String studentId) {
@@ -81,15 +67,16 @@ class _AttendanceListPageState extends State<AttendanceListPage> {
         'duration': widget.duration,
         'session': widget.session,
         'lectureType': widget.lectureType,
+        'subject': widget.subject,
         'presentStudents': presentStudents,
         'absentStudents': absentStudents,
       });
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Attendance data submitted successfully!')),
+        const SnackBar(content: Text('Attendance data submitted successfully!')),
       );
 
-      Future.delayed(Duration(seconds: 3), () {
+      Future.delayed(const Duration(seconds: 3), () {
         Navigator.pop(context);
       });
     } catch (e) {
@@ -101,67 +88,111 @@ class _AttendanceListPageState extends State<AttendanceListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Student List'),
+        title: const Text('Student List'),
+        backgroundColor: Colors.blueAccent,
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: searchController,
-                    decoration: InputDecoration(
-                      labelText: 'Search by First Name or Roll No',
-                      suffixIcon: IconButton(
-                        icon: Icon(Icons.search),
-                        onPressed: () => searchStudents(searchController.text),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 10.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.blue[100],
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 10.0),
+                        child: TextField(
+                          controller: searchController,
+                          onChanged: (value) {
+                            setState(() {}); // Trigger rebuild on search input change
+                          },
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            labelText: 'Search by First Name or Roll No',
+                            labelStyle: const TextStyle(color: Colors.white),
+                            suffixIcon: IconButton(
+                              icon: const Icon(Icons.search, color: Colors.white),
+                              onPressed: () {}, // No need to handle this separately
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                ),
-                SizedBox(width: 10),
-                DropdownButton<String>(
-                  value: null,
-                  hint: Text('Bulk Update'),
+                ],
+              ),
+            ),
+            const SizedBox(height: 20),
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.blue[100],
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: DropdownButton<String>(
+                  dropdownColor: Colors.blueAccent,
+                  underline: Container(), // Remove the underline
+                  value: _selectedBulkUpdate,
+                  hint: const Text('Bulk Update', style: TextStyle(color: Colors.white)),
                   onChanged: (value) {
                     if (value == 'All Present') {
                       bulkUpdate(true);
+                      _selectedBulkUpdate = 'All Present';
                     } else if (value == 'All Absent') {
                       bulkUpdate(false);
+                      _selectedBulkUpdate = 'All Absent';
+                    } else {
+                      _selectedBulkUpdate = null;
                     }
                   },
-                  items: [
-                    DropdownMenuItem(child: Text('All Present'), value: 'All Present'),
-                    DropdownMenuItem(child: Text('All Absent'), value: 'All Absent'),
+                  items: const [
+                    DropdownMenuItem(value: 'All Present', child: Text('All Present', style: TextStyle(color: Colors.white))),
+                    DropdownMenuItem(value: 'All Absent', child: Text('All Absent', style: TextStyle(color: Colors.white))),
                   ],
                 ),
-              ],
+              ),
             ),
-          ),
-          Expanded(
-            child: StreamBuilder<QuerySnapshot>(
-              stream: _studentStream,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
-                }
+            const SizedBox(height: 10), // Added space for separation
+            Expanded(
+              child: StreamBuilder<QuerySnapshot>(
+                stream: _studentStream,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
 
-                if (snapshot.hasError) {
-                  return Center(child: Text('Error: ${snapshot.error}'));
-                }
+                  if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  }
 
-                if (snapshot.hasData) {
-                  var studentDocs = filteredStudents.isNotEmpty ? filteredStudents : snapshot.data!.docs.where((doc) => doc['role'] == 'Student').toList();
+                  var filteredDocs = snapshot.data!.docs.where((doc)  {
+                    var searchValue = searchController.text.toLowerCase();
+                    var firstName = doc['firstName'].toString().toLowerCase();
+                    return firstName.contains(searchValue) && doc['role'] == 'Student'; // Filter by role 'Student'
+                  }).toList();
 
-                  if (studentDocs.isNotEmpty) {
+                  if (filteredDocs.isNotEmpty) {
                     return ListView.builder(
-                      itemCount: studentDocs.length,
+                      itemCount: filteredDocs.length,
                       itemBuilder: (context, index) {
-                        var student = studentDocs[index];
-                        var fullName = '${student['firstName']} ${student['middleName']} ${student['lastName']}';
+                        var student = filteredDocs[index];
+                        var firstName = student['firstName'].toString();
+                        var middleName = student['middleName'].toString();
+                        var lastName = student['lastName'].toString();
+                        var capitalizedFirstName = firstName.isNotEmpty ? firstName[0].toUpperCase() + firstName.substring(1) : '';
+                        var capitalizedMiddleName = middleName.isNotEmpty ? middleName[0].toUpperCase() + middleName.substring(1) : '';
+                        var capitalizedLastName = lastName.isNotEmpty ? lastName[0].toUpperCase() + lastName.substring(1) : '';
+
+                        var fullName = '$capitalizedFirstName $capitalizedMiddleName $capitalizedLastName';
+
                         var studentId = student.id;
 
                         // Calculate and add roll number to the list
@@ -171,63 +202,67 @@ class _AttendanceListPageState extends State<AttendanceListPage> {
                         // Default attendance status to 'P' (present)
                         attendanceStatusMap.putIfAbsent(studentId, () => 'P');
 
-                        return Container(
-                          margin: EdgeInsets.symmetric(vertical: 8.0),
-                          padding: EdgeInsets.all(12.0),
-                          decoration: BoxDecoration(
-                            color: attendanceStatusMap[studentId] == 'P' ? Colors.green : Colors.red,
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  '$rollNo. $fullName',
-                                  style: TextStyle(color: Colors.white),
+                        return GestureDetector(
+                          onTap: () {
+                            toggleAttendance(studentId);
+                          },
+                          child: Container(
+                            height: 60,
+                            margin: const EdgeInsets.symmetric(vertical: 8.0),
+                            padding: const EdgeInsets.all(12.0),
+                            decoration: BoxDecoration(
+                              color: attendanceStatusMap[studentId] == 'P' ? Colors.green : Colors.red,
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    '$rollNo. $fullName',
+                                    style: const TextStyle(color: Colors.white),
+                                  ),
                                 ),
-                              ),
-                              SizedBox(width: 10),
-                              ElevatedButton(
-                                onPressed: () {
-                                  toggleAttendance(studentId);
-                                },
-                                child: Text(
-                                  attendanceStatusMap[studentId] == 'P' ? 'P' : 'A',
+                                const SizedBox(width: 10),
+                                Text(
+                                  attendanceStatusMap[studentId] == 'P' ? 'Present' : 'Absent',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         );
                       },
                     );
                   } else {
-                    return Center(child: Text('No students found.'));
+                    return const Center(child: Text('No students found.'));
                   }
-                }
-
-                return Center(child: Text('No data available.'));
-              },
+                },
+              ),
             ),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              List<String> presentStudents = [];
-              List<String> absentStudents = [];
-              attendanceStatusMap.forEach((studentId, status) {
-                if (status == 'P') {
-                  presentStudents.add(studentId);
-                } else {
-                  absentStudents.add(studentId);
-                }
-              });
+            ElevatedButton(
+              onPressed: () {
+                List<String> presentStudents = [];
+                List<String> absentStudents = [];
+                attendanceStatusMap.forEach((studentId, status) {
+                  if (status == 'P') {
+                    presentStudents.add(studentId);
+                  } else {
+                    absentStudents.add(studentId);
+                  }
+                });
 
-              storeAttendanceData(presentStudents, absentStudents);
-            },
-            child: Text('Submit'),
-          ),
-        ],
+                storeAttendanceData(presentStudents, absentStudents);
+              },
+              child: const Text('Submit'),
+            ),
+          ],
+        ),
       ),
     );
   }
 }
+//before before

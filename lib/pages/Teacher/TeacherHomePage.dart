@@ -1,6 +1,10 @@
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:timewise/pages/Teacher/AttendanceReport.dart';
 import 'package:timewise/pages/Teacher/student_export.dart';
+import 'package:easy_date_timeline/easy_date_timeline.dart';
+import 'package:timewise/pages/attendance/attendance.dart';
 
 class TeacherHomePage extends StatefulWidget {
   const TeacherHomePage({Key? key}) : super(key: key);
@@ -15,41 +19,201 @@ class _TeacherHomePageState extends State<TeacherHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          ElevatedButton(
-            onPressed: () async {
-              String? csvPath = await studentExporter.downloadCSV();
-              if (csvPath != null) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('CSV file saved at $csvPath')),
-                );
-              } else {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Error downloading CSV file')),
-                );
-              }
-            },
-            child: const Text('Download CSV'),
-          ),
-
-          ElevatedButton(
-            onPressed: () async {
-              String? csvPath = await studentExporter.downloadCSV();
-              if (csvPath != null) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('CSV file saved at $csvPath')),
-                );
-              } else {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Error downloading CSV file')),
-                );
-              }
-            },
-            child: const Text('Download att'),
-          ),
-        ],
+      appBar: AppBar(
+        title:const Text("Home Page"),
+        backgroundColor: Colors.blueAccent,
       ),
+      backgroundColor: CupertinoColors.systemGrey4,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 1,
+                      blurRadius: 9,
+                      offset: const Offset(0, 3),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const SizedBox(
+                      height: 32.0,
+                    ),
+                    _landscapeViewExample(), // Retain only landscape view
+                    const SizedBox(
+                      height: 32.0,
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 25),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10.0),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'Details',
+                    style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20,),
+              Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      _yellowContainer(
+                        'assets/images/attendance.png',
+                        'Attendance Report'
+                      ),
+                      _yellowContainer(
+                        'assets/images/background.png',
+                        'Mark Attendance'
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      _yellowContainer(
+                        'assets/images/attendance.png',
+                        'Calender'
+                      ),
+                      _yellowContainer(
+                        'assets/images/attendance.png',
+                        'Send Notification'
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      _yellowContainer(
+                        'assets/images/attendance.png',
+                        'List of Students'
+
+                      ),
+                      _yellowContainer(
+                        'assets/images/attendance.png',
+                        'Attendance Dashboard'
+
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 100,),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _yellowContainer(String imageUrl, String title) {
+    return GestureDetector(
+      onTap: () {
+        // Navigate to the specific page based on the title
+        if (title == 'Attendance Report') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const AttendanceReport()),
+          );
+        } else if (title == 'Mark Attendance') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const Attendance()),
+          );
+        }
+        // Add more conditions for other titles and pages as needed
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: CupertinoColors.activeBlue,
+        ),
+        width: 170,
+        height: 200,
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Container(
+                height:70, // Increased height for the main image
+                width: 70,
+                child: Image.asset(
+                  imageUrl,
+                ),
+              ),
+            ),
+            const SizedBox(width: 40),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 18.0,horizontal: 10),
+                child: Text(
+                  title,
+                  style: const TextStyle(fontSize: 20,fontWeight:FontWeight.w600 ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _landscapeViewExample() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 15.0),
+          child: Text(
+            'Hello Teacher!',
+            style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+          ),
+        ),
+        const SizedBox(height: 8),
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 15.0),
+          child: Text(
+            "Ready for today's classes!",
+            style: TextStyle(fontSize: 19),
+          ),
+        ),
+        const SizedBox(height: 16),
+        EasyDateTimeLine(
+          initialDate: DateTime.now(),
+          onDateChange: (selectedDate) {
+            // Handle date change
+          },
+          activeColor: const Color(0xff116A7B),
+          dayProps: const EasyDayProps(
+            landScapeMode: true,
+            activeDayStyle: DayStyle(
+              borderRadius: 48.0,
+            ),
+            dayStructure: DayStructure.dayStrDayNum,
+          ),
+          headerProps: const EasyHeaderProps(
+            dateFormatter: DateFormatter.fullDateDMonthAsStrY(),
+          ),
+        ),
+      ],
     );
   }
 }

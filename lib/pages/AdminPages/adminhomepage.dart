@@ -1,27 +1,31 @@
-import 'package:flutter/material.dart';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:intl/date_symbol_data_file.dart';
+import 'package:timewise/pages/AdminPages/StudentListPage.dart';
+import 'package:timewise/pages/AdminPages/teacherlistpage.dart';
+import 'package:timewise/pages/Student/calender.dart';
 import 'package:timewise/pages/Teacher/AttendanceReport.dart';
 import 'package:easy_date_timeline/easy_date_timeline.dart';
+import 'package:timewise/pages/Teacher/SendMessage.dart';
 import 'package:timewise/pages/attendance/attendance.dart';
-import 'package:timewise/pages/attendance/loginclient.dart';
+import 'package:timewise/pages/chatting/screens/splash_page.dart';
+import 'package:timewise/pages/loginpage/register.dart';
 
-import '../chatting/screens/splash_page.dart';
-import 'calender.dart';
-class StudentHomePage extends StatefulWidget {
-  const StudentHomePage.student({super.key});
+class AdminHomePage extends StatefulWidget {
+  const AdminHomePage({super.key});
 
   @override
-  State<StudentHomePage> createState() => _StudentHomePageState();
+  State<AdminHomePage> createState() => _AdminHomePageState();
 }
 
-class _StudentHomePageState extends State<StudentHomePage> {
+class _AdminHomePageState extends State<AdminHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title:const Text("Home Page"),
-        backgroundColor: Colors.blueAccent,
+        backgroundColor: CupertinoColors.activeBlue,
       ),
       backgroundColor: CupertinoColors.systemGrey4,
       body: SingleChildScrollView(
@@ -78,8 +82,8 @@ class _StudentHomePageState extends State<StudentHomePage> {
                           'Attendance Report'
                       ),
                       _yellowContainer(
-                          'assets/images/calendar.png',
-                          'Calender'
+                          'assets/images/student.png',
+                          'Add students'
                       ),
                     ],
                   ),
@@ -88,12 +92,27 @@ class _StudentHomePageState extends State<StudentHomePage> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       _yellowContainer(
+                          'assets/images/calendar.png',
+                          'Calender'
+                      ),
+                      _yellowContainer(
                           'assets/images/notifications.png',
                           'Send Notification'
                       ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
                       _yellowContainer(
-                          'assets/images/dashboard.png',
-                          'Attendance Dashboard'
+                          'assets/images/checklist.png',
+                          'List of Students'
+
+                      ),
+                      _yellowContainer(
+                          'assets/images/checklist.png',
+                          'List of Teachers'
 
                       ),
                     ],
@@ -117,11 +136,15 @@ class _StudentHomePageState extends State<StudentHomePage> {
             context,
             MaterialPageRoute(builder: (context) => const AttendanceReport()),
           );
-        }
-        else if (title == 'Calender') {
+        } else if (title == 'Add students') {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) =>  MyCalender()),
+            MaterialPageRoute(builder: (context) =>  Register()),
+          );
+        }else if (title == 'Calender') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => MyCalender()),
           );
         }
         else if (title == 'Send Notification') {
@@ -130,10 +153,16 @@ class _StudentHomePageState extends State<StudentHomePage> {
             MaterialPageRoute(builder: (context) => const ChatSplashPage1()),
           );
         }
-        else if (title == 'Attendance Dashboard') {
+        else if (title == 'List of Students') {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) =>  const Loginc()),
+            MaterialPageRoute(builder: (context) =>  StudentListPage()),
+          );
+        }
+        else if (title == 'List of Teachers') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) =>  TeacherListPage()),
           );
         }
         // Add more conditions for other titles and pages as needed
@@ -181,7 +210,7 @@ class _StudentHomePageState extends State<StudentHomePage> {
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 15.0),
           child: Text(
-            'Hello Students!',
+            'Hello Admin!',
             style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
           ),
         ),

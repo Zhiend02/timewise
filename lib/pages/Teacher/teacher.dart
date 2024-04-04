@@ -4,10 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:timewise/pages/Teacher/SendMessage.dart';
 import 'package:timewise/pages/Teacher/TeacherHomePage.dart';
 import 'package:timewise/pages/Teacher/TeacherProfile.dart';
-import 'package:timewise/pages/attendance/attendance.dart';
-import 'package:timewise/pages/attendance/login.dart';
-import '../attendance/client_screen.dart';
-import '../loginpage/logoutpage.dart';
+import 'package:timewise/pages/chatting/screens/splash_page.dart';
+
 import '../AdminPages/model.dart';
 
 class Teacher extends StatefulWidget {
@@ -26,7 +24,7 @@ class _TeacherState extends State<Teacher> {
   /// widget list
   final List<Widget> bottomBarPages = [
     const TeacherHomePage(),
-    const SendMessage(),
+    const ChatSplashPage1(),
     const TeacherHomePage(),
     const TeacherProfile(),
   ];
@@ -119,11 +117,11 @@ class _TeacherState extends State<Teacher> {
 
             BottomBarItem(
               inActiveItem: Icon(
-                Icons.star,
+                Icons.send_and_archive,
                 color: Colors.blueGrey,
               ),
               activeItem: Icon(
-                Icons.star,
+                Icons.send_and_archive,
                 color: Colors.blueAccent,
               ),
               itemLabel: 'Page 2',
@@ -132,11 +130,11 @@ class _TeacherState extends State<Teacher> {
             ///svg example
             BottomBarItem(
               inActiveItem: Icon(
-                Icons.star,
+                Icons.calendar_month,
                 color: Colors.blueGrey,
               ),
               activeItem: Icon(
-                Icons.star,
+                Icons.calendar_month,
                 color: Colors.blueAccent,
               ),
               itemLabel: 'Page 3',
@@ -145,15 +143,16 @@ class _TeacherState extends State<Teacher> {
 
             BottomBarItem(
               inActiveItem: Icon(
-                Icons.settings,
+                Icons.person,
                 color: Colors.blueGrey,
               ),
               activeItem: Icon(
-                Icons.settings,
-                color: Colors.pink,
+                Icons.person,
+                color: Colors.blueAccent,
               ),
               itemLabel: 'Page 4',
             ),
+
 
 
           ],

@@ -1,11 +1,14 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:timewise/pages/AdminPages/StudentListPage.dart';
-import 'package:timewise/pages/loginpage/register.dart';
+import 'package:timewise/pages/AdminPages/adminhomepage.dart';
+import 'package:timewise/pages/AdminPages/adminprofile.dart';
+import 'package:timewise/pages/Student/calender.dart';
+import 'package:timewise/pages/chatting/screens/splash_page.dart';
+import '../Teacher/SendMessage.dart';
 import '../loginpage/logoutpage.dart';
 import 'model.dart';
-
+import 'package:animated_notch_bottom_bar/animated_notch_bottom_bar/animated_notch_bottom_bar.dart';
 class Admin extends StatefulWidget {
   String id;
   Admin({required this.id});
@@ -14,12 +17,25 @@ class Admin extends StatefulWidget {
 }
 
 class _AdminState extends State<Admin> {
+  final _pageController = PageController(initialPage: 0);
+  final _controller = NotchBottomBarController(index: 0);
+  int maxCount = 4;
+
+
+  /// widget list
+  final List<Widget> bottomBarPages = [
+    const AdminHomePage(),
+    const ChatSplashPage1(),
+     MyCalender(),
+    const AdminProfile(),
+  ];
   String id;
   var role;
   var emaill;
   UserModel loggedInUser = UserModel();
 
   _AdminState({required this.id});
+
   @override
   void initState() {
     super.initState();
@@ -42,42 +58,85 @@ class _AdminState extends State<Admin> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "Admin",
-        ),
-        actions: [
-          IconButton(
-            onPressed: () {
-              logout(context);
-            },
-            icon: const Icon(Icons.logout),
-          ),
-        ],
-      ),
-      
-      body: Container(
-        color: Colors.blue,
-        child: Column(
-          children: [
-            ElevatedButton(onPressed: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context) => StudentListPage(),));},
+    body: PageView(
+      controller: _pageController,
+      physics: const NeverScrollableScrollPhysics(),
+      children: List.generate(bottomBarPages.length, (index) => bottomBarPages[index]),
+    ),
+        extendBody: true,
+        bottomNavigationBar: (bottomBarPages.length <= maxCount) ? AnimatedNotchBottomBar(
+          notchBottomBarController: _controller,
+          color: Colors.white,
+          showLabel: false,
+          shadowElevation: 5,
+          kBottomRadius: 12.0,
+          notchColor: Colors.black87,
 
-                child: const Text("Student list")),
+          removeMargins: true,
+          bottomBarWidth: 500,
+          durationInMilliSeconds: 200,
+          bottomBarItems: const [
 
-            ElevatedButton(onPressed: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context) => Register(),));},
+            BottomBarItem(
+              inActiveItem: Icon(
+                Icons.home_filled,
+                color: Colors.blueGrey,
+              ),
+              activeItem: Icon(
+                Icons.home_filled,
+                color: Colors.blueAccent,
+              ),
+              itemLabel: 'Home Page',
+            ),
 
-                child: const Text("Add Students/teacher")),
+
+            BottomBarItem(
+              inActiveItem: Icon(
+                Icons.send_and_archive,
+                color: Colors.blueGrey,
+              ),
+              activeItem: Icon(
+                Icons.send_and_archive,
+                color: Colors.blueAccent,
+              ),
+              itemLabel: 'Page 2',
+            ),
+
+            ///svg example
+            BottomBarItem(
+              inActiveItem: Icon(
+                Icons.calendar_month,
+                color: Colors.blueGrey,
+              ),
+              activeItem: Icon(
+                Icons.calendar_month,
+                color: Colors.blueAccent,
+              ),
+              itemLabel: 'Page 3',
+            ),
+
+
+            BottomBarItem(
+              inActiveItem: Icon(
+                Icons.person,
+                color: Colors.blueGrey,
+              ),
+              activeItem: Icon(
+                Icons.person,
+                color: Colors.blueAccent,
+              ),
+              itemLabel: 'Page 4',
+            ),
+
+
 
           ],
-        ),
-
-
-
-      ),
+          onTap: (index) {
+            _pageController.jumpToPage(index);
+          },
+          kIconSize: 24.0,
+        )
+            : null,
     );
   }
-
-
 }

@@ -23,185 +23,42 @@ class AttendanceCSVExporter {
           .map((student) => student.data() as Map<String, dynamic>)
           .toList();
 
-      // Fetch all data from the 'attendance_records' collection
-      QuerySnapshot<Map<String, dynamic>> allAttendanceSnapshot =
-      await FirebaseFirestore.instance.collection('attendance_records').get();
+      // Fetch data from the 'attendance_records' collection within the date range
+      QuerySnapshot<Map<String, dynamic>> attendanceSnapshot = await FirebaseFirestore.instance
+          .collection('attendance_records')
+          .where('date', isGreaterThanOrEqualTo: startDate)
+          .where('date', isLessThanOrEqualTo: endDate)
+          .get();
 
-      List<Map<String, dynamic>> allAttendanceData = allAttendanceSnapshot.docs
+      List<Map<String, dynamic>> attendanceData = attendanceSnapshot.docs
+          .where((doc) =>
+      doc['session'] == session && doc['lectureType'] == lectureType)
           .map((doc) => doc.data() as Map<String, dynamic>)
-          .toList();
-
-      // Filter attendance data based on the date range, session, and lecture type
-      List<Map<String, dynamic>> filteredAttendanceData = allAttendanceData
-          .where((attendance) =>
-      attendance['session'] == session &&
-          attendance['lectureType'] == lectureType &&
-          attendance['date'].toDate().isAfter(startDate) &&
-          attendance['date'].toDate().isBefore(endDate))
           .toList();
 
       // Determine subject list based on session and lecture type
       List<String> subjectsList = [];
-      Map<String, List<String>> subjectsMap = {};
       if (session == 'Odd' && lectureType == 'Regular') {
-        subjectsList = [
-          'Math III',
-          'DS',
-          'DSGT',
-          'CG',
-          'DLCOA',
-          'Maths Tutorial',
-          'DS Lab',
-          'CG Lab',
-          'DLCOA Lab'
-        ];
-        subjectsMap = {
-          'Math III': [
-            'DS',
-            'DSGT',
-            'CG',
-            'DLCOA',
-            'Maths Tutorial',
-            'DS Lab',
-            'CG Lab',
-            'DLCOA Lab'
-          ],
-          'DS': [
-            'Math III',
-            'DSGT',
-            'CG',
-            'DLCOA',
-            'Maths Tutorial',
-            'DS Lab',
-            'CG Lab',
-            'DLCOA Lab'
-          ],
-          // Add mappings for other subjects as needed
-        };
+        subjectsList = ['Math III', 'DS', 'DSGT', 'CG', 'DLCOA', 'Maths Tutorial', 'DS Lab', 'CG Lab', 'DLCOA Lab'];
       } else if (session == 'Odd' && lectureType == 'Practical') {
-        subjectsList = [
-          'Math III',
-          'DS',
-          'DSGT',
-          'CG',
-          'DLCOA',
-          'Maths Tutorial',
-          'DS Lab',
-          'CG Lab',
-          'DLCOA Lab'
-        ];
-        subjectsMap = {
-          'Math III': [
-            'DS',
-            'DSGT',
-            'CG',
-            'DLCOA',
-            'Maths Tutorial',
-            'DS Lab',
-            'CG Lab',
-            'DLCOA Lab'
-          ],
-          'DS': [
-            'Math III',
-            'DSGT',
-            'CG',
-            'DLCOA',
-            'Maths Tutorial',
-            'DS Lab',
-            'CG Lab',
-            'DLCOA Lab'
-          ],
-          // Add mappings for other subjects as needed
-        };
+        subjectsList = ['Math III', 'DS', 'DSGT', 'CG', 'DLCOA', 'Maths Tutorial', 'DS Lab', 'CG Lab', 'DLCOA Lab'];
       } else if (session == 'Even' && lectureType == 'Regular') {
-        subjectsList = [
-          'Math IV',
-          'AOA',
-          'DBMS',
-          'OS',
-          'MP',
-          'Maths Tutorial',
-          'AOA Lab',
-          'OS Lab',
-          'MP Lab',
-          'DBMS Lab'
-        ];
-        subjectsMap = {
-          'Math IV': [
-            'AOA',
-            'DBMS',
-            'OS',
-            'MP',
-            'Maths Tutorial',
-            'AOA Lab',
-            'OS Lab',
-            'MP Lab',
-            'DBMS Lab'
-          ],
-          'AOA': [
-            'Math IV',
-            'DBMS',
-            'OS',
-            'MP',
-            'Maths Tutorial',
-            'AOA Lab',
-            'OS Lab',
-            'MP Lab',
-            'DBMS Lab'
-          ],
-          // Add mappings for other subjects as needed
-        };
+        subjectsList = ['Math IV', 'AOA', 'DBMS', 'OS', 'MP', 'Maths Tutorial', 'AOA Lab', 'OS Lab', 'MP Lab', 'DBMS Lab'];
       } else if (session == 'Even' && lectureType == 'Practical') {
-        subjectsList = [
-          'Math IV',
-          'AOA',
-          'DBMS',
-          'OS',
-          'MP',
-          'Maths Tutorial',
-          'AOA Lab',
-          'OS Lab',
-          'MP Lab',
-          'DBMS Lab'
-        ];
-        subjectsMap = {
-          'Math IV': [
-            'AOA',
-            'DBMS',
-            'OS',
-            'MP',
-            'Maths Tutorial',
-            'AOA Lab',
-            'OS Lab',
-            'MP Lab',
-            'DBMS Lab'
-          ],
-          'AOA': [
-            'Math IV',
-            'DBMS',
-            'OS',
-            'MP',
-            'Maths Tutorial',
-            'AOA Lab',
-            'OS Lab',
-            'MP Lab',
-            'DBMS Lab'
-          ],
-          // Add mappings for other subjects as needed
-        };
+        subjectsList = ['Math IV', 'AOA', 'DBMS', 'OS', 'MP', 'Maths Tutorial', 'AOA Lab', 'OS Lab', 'MP Lab', 'DBMS Lab'];
       }
 
-      // Create CSV format with student names and subject columns
+      // Create CSV format with subject columns
       List<List<dynamic>> csvData = [
-        ['Student Name', ...subjectsList.map((subject) => '$subject (${calculateSubjectOccurrences(subject, filteredAttendanceData, subjectsMap)})')],
+        ['Student Name', ...subjectsList]
       ];
 
-      // Iterate through student data and populate attendance for each subject
       studentData.forEach((student) {
-        String fullName = '${student['firstName']} ${student['middleName']} ${student['lastName']}';
+        String fullName =
+            '${student['firstName']} ${student['middleName']} ${student['lastName']}';
         List<dynamic> row = [fullName];
         subjectsList.forEach((subject) {
-          var subjectPresent = filteredAttendanceData.any((attendance) =>
+          var subjectPresent = attendanceData.any((attendance) =>
           attendance['subject'].contains(fullName) &&
               attendance['subject'].contains(subject));
           row.add(subjectPresent ? 'Present' : 'Absent');
@@ -237,14 +94,5 @@ class AttendanceCSVExporter {
       print('Error: $e');
       return null;
     }
-  }
-
-  // Function to calculate subject occurrences
-  int calculateSubjectOccurrences(
-      String subject, List<Map<String, dynamic>> attendanceData, Map<String, List<String>> subjectsMap) {
-    int occurrences = attendanceData.where((attendance) =>
-    attendance['subject'].contains(subject) || subjectsMap[subject]?.any((subSubject) => attendance['subject'].contains(subSubject)) == true
-    ).length;
-    return occurrences;
   }
 }

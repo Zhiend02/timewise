@@ -1,10 +1,14 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:timewise/pages/AdminPages/StudentListPage.dart';
+import 'package:timewise/pages/Student/calender.dart';
 import 'package:timewise/pages/Teacher/AttendanceReport.dart';
 import 'package:timewise/pages/Teacher/student_export.dart';
 import 'package:easy_date_timeline/easy_date_timeline.dart';
 import 'package:timewise/pages/attendance/attendance.dart';
+import 'package:timewise/pages/attendance/login.dart';
+import 'package:timewise/pages/chatting/screens/splash_page.dart';
 
 class TeacherHomePage extends StatefulWidget {
   const TeacherHomePage({Key? key}) : super(key: key);
@@ -78,7 +82,7 @@ class _TeacherHomePageState extends State<TeacherHomePage> {
                         'Attendance Report'
                       ),
                       _yellowContainer(
-                        'assets/images/background.png',
+                        'assets/images/markattendance.png',
                         'Mark Attendance'
                       ),
                     ],
@@ -88,11 +92,11 @@ class _TeacherHomePageState extends State<TeacherHomePage> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       _yellowContainer(
-                        'assets/images/attendance.png',
+                        'assets/images/calendar.png',
                         'Calender'
                       ),
                       _yellowContainer(
-                        'assets/images/attendance.png',
+                        'assets/images/notifications.png',
                         'Send Notification'
                       ),
                     ],
@@ -102,12 +106,12 @@ class _TeacherHomePageState extends State<TeacherHomePage> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       _yellowContainer(
-                        'assets/images/attendance.png',
+                        'assets/images/checklist.png',
                         'List of Students'
 
                       ),
                       _yellowContainer(
-                        'assets/images/attendance.png',
+                        'assets/images/dashboard.png',
                         'Attendance Dashboard'
 
                       ),
@@ -138,6 +142,30 @@ class _TeacherHomePageState extends State<TeacherHomePage> {
             MaterialPageRoute(builder: (context) => const Attendance()),
           );
         }
+        else if (title == 'Calender') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) =>  MyCalender()),
+          );
+        }
+        else if (title == 'Send Notification') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const ChatSplashPage1()),
+          );
+        }
+        else if (title == 'List of Students') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) =>  StudentListPage()),
+          );
+        }
+        else if (title == 'Attendance Dashboard') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const Login()),
+          );
+        }
         // Add more conditions for other titles and pages as needed
       },
       child: Container(
@@ -150,7 +178,7 @@ class _TeacherHomePageState extends State<TeacherHomePage> {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(20.0),
               child: Container(
                 height:70, // Increased height for the main image
                 width: 70,

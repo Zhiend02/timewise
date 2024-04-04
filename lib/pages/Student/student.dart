@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:timewise/pages/Student/calender.dart';
 import 'package:timewise/pages/Student/studentprofile.dart';
+import '../chatting/screens/splash_page.dart';
 import 'StudentHomepage.dart';
 import '../AdminPages/model.dart';
 import 'package:animated_notch_bottom_bar/animated_notch_bottom_bar/animated_notch_bottom_bar.dart';
@@ -26,8 +28,8 @@ class _StudentState extends State<Student> {
   /// widget list
   final List<Widget> bottomBarPages = [
     const StudentHomePage.student(),
-    const StudentHomePage.student(),
-    const StudentHomePage.student(),
+    const ChatSplashPage1(),
+          MyCalender(),
     const StudentProfile(),
   ];
 
@@ -97,11 +99,11 @@ class _StudentState extends State<Student> {
 
           BottomBarItem(
             inActiveItem: Icon(
-              Icons.star,
+              Icons.send_and_archive,
               color: Colors.blueGrey,
             ),
             activeItem: Icon(
-              Icons.star,
+              Icons.send_and_archive,
               color: Colors.blueAccent,
             ),
             itemLabel: 'Page 2',
@@ -110,7 +112,7 @@ class _StudentState extends State<Student> {
           ///svg example
           BottomBarItem(
             inActiveItem: Icon(
-              Icons.star,
+              Icons.calendar_month,
               color: Colors.blueGrey,
             ),
             activeItem: Icon(
@@ -128,7 +130,7 @@ class _StudentState extends State<Student> {
             ),
             activeItem: Icon(
               Icons.settings,
-              color: Colors.pink,
+              color: Colors.blueAccent,
             ),
             itemLabel: 'Page 4',
           ),

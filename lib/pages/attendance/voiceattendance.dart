@@ -3,6 +3,8 @@ import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:timewise/pages//global.dart' as globals;
 
+import '../global.dart';
+
 
 
 class VoiceInputScreen extends StatefulWidget {
@@ -30,9 +32,11 @@ class _VoiceInputScreenState extends State<VoiceInputScreen> {
       onError: (error) => print('Error: $error'),
       onStatus: (status) {
         if (status == stt.SpeechToText.listeningStatus) {
-          setState(() => _statusMessage = 'Wait...'); // Change status message to "Wait..." when listening
+          setState(() => _statusMessage =
+          'Wait...'); // Change status message to "Wait..." when listening
         } else {
-          setState(() => _statusMessage = 'Start'); // Change status message to "Start" otherwise
+          setState(() => _statusMessage =
+          'Start'); // Change status message to "Start" otherwise
         }
       },
     );
@@ -59,7 +63,9 @@ class _VoiceInputScreenState extends State<VoiceInputScreen> {
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: _isListening ? _stopListening : _startListening,
-              child: Text(_isListening ? 'Stop Listening' : '$_statusMessage'), // Display status message
+              child: Text(_isListening
+                  ? 'Stop Listening'
+                  : '$_statusMessage'), // Display status message
             ),
             SizedBox(height: 20),
             ElevatedButton(
@@ -96,10 +102,13 @@ class _VoiceInputScreenState extends State<VoiceInputScreen> {
   void _stopListening() {
     setState(() => _isListening = false);
     _speechToText.stop();
-    setState(() => _statusMessage = 'Start'); // Change status message back to "Start"
+    setState(() =>
+    _statusMessage = 'Start'); // Change status message back to "Start"
+    _uniqueNumbersList = _numbersList.toSet()
+        .toList(); // Update _uniqueNumbersList with unique numbers
     globals.UniqueNumbersList.addAll(_uniqueNumbersList);
-    _printNumbersList(); // Call method to print numbers list automatically
-    _printUniqueNumbersList(); // Call method to print unique numbers list automatically
+    // _printNumbersList(); // Call method to print numbers list automatically
+    // _printUniqueNumbersList(); // Call method to print unique numbers list automatically
   }
 
   void _processSpeechInput(String input) {
@@ -134,16 +143,16 @@ class _VoiceInputScreenState extends State<VoiceInputScreen> {
     }
   }
 
-  void _printNumbersList() {
-    print('Numbers List: $_numbersList');
-  }
-
-  void _printUniqueNumbersList() {
-    _uniqueNumbersList = _numbersList.toSet().toList();
-    // print('Unique Numbers List: $uniqueNumbersList');
-  }
+//   void _printNumbersList() {
+//     print('Numbers List: $_numbersList');
+//   }
+//
+//   void _printUniqueNumbersList() {
+//
+//     print('Unique Numbers List: $UniqueNumbersList');
+//   }
+// }
 }
-
 void main() {
   runApp(MaterialApp(
     home: VoiceInputScreen(),

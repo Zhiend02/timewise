@@ -48,6 +48,7 @@ class _AttendanceListPageState extends State<AttendanceListPage> {
         .orderBy('rollNo')
         .snapshots();
     fetchRollNumbers();
+    print(globals.UniqueNumbersList);
     
   }
   void fetchRollNumbers() async {
@@ -239,7 +240,8 @@ class _AttendanceListPageState extends State<AttendanceListPage> {
                         var fullName = '$capitalizedFirstName $capitalizedMiddleName $capitalizedLastName';
 
                         var studentId = student.id;
-                        var rollNo = rollNumbers[index];
+                        var rollNo = index < rollNumbers.length ? rollNumbers[index] : '';
+
 
                         // Default attendance status to 'P' (present)
                         attendanceStatusMap.putIfAbsent(studentId, () => 'P');

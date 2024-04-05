@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:timewise/pages/AdminPages/home.dart';
 import 'package:timewise/pages/chatting/screens/profile_screen.dart';
 
 
@@ -52,7 +53,8 @@ class _ChatHomePageState extends State<ChatHomePage> {
         
           //app bar
           appBar: AppBar(
-            backgroundColor: Colors.green,
+            automaticallyImplyLeading: false,
+            backgroundColor: CupertinoColors.activeBlue,
             title: _isSearching
                 ? TextField(
               decoration: const InputDecoration(
@@ -75,7 +77,13 @@ class _ChatHomePageState extends State<ChatHomePage> {
                 }
               },
             )
-                : const Text('Send Notification'),
+
+                :  Row(
+                  children: [
+                    IconButton(onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage(),));}, icon: const Icon(Icons.arrow_back)),
+                    const Text('Send Notification'),
+                  ],
+                ),
             actions: [
               IconButton(
                   onPressed: () {

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:timewise/pages/attendance/voiceattendance.dart';
+import 'package:timewise/pages//global.dart' as globals;
 
 class AttendanceListPage extends StatefulWidget {
   final String date;
@@ -9,6 +11,8 @@ class AttendanceListPage extends StatefulWidget {
   final String lectureType;
   final String subject;
 
+
+
   AttendanceListPage({
     required this.date,
     required this.time,
@@ -16,7 +20,13 @@ class AttendanceListPage extends StatefulWidget {
     required this.session,
     required this.lectureType,
     required this.subject,
+
   });
+
+
+
+
+
 
   @override
   _AttendanceListPageState createState() => _AttendanceListPageState();
@@ -35,10 +45,20 @@ class _AttendanceListPageState extends State<AttendanceListPage> {
     super.initState();
     _studentStream = FirebaseFirestore.instance
         .collection('users')
-        .orderBy('lastName')
-        .orderBy('firstName')
-        .orderBy('middleName')
+        .orderBy('rollNo')
         .snapshots();
+    fetchRollNumbers();
+    
+  }
+  void fetchRollNumbers() async {
+    QuerySnapshot rollNumbersSnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .orderBy('rollNo')
+        .get();
+
+    if (rollNumbersSnapshot.docs.isNotEmpty) {
+      rollNumbers = rollNumbersSnapshot.docs.map((doc) => doc['rollNo'].toString()).toList();
+    }
   }
 
   void toggleAttendance(String studentId) {
@@ -57,6 +77,17 @@ class _AttendanceListPageState extends State<AttendanceListPage> {
         attendanceStatusMap[studentId] = present ? 'P' : 'A';
       });
     });
+  }
+
+
+  bool _isNumberInUniqueList(String rollNo) {
+    if (globals.UniqueNumbersList.contains(rollNo)) {
+      // If the number is in the uniqueNumbersList, change attendance status to 'A' (absent)
+      attendanceStatusMap[rollNo] = 'A';
+      return true;
+    } else {
+      return false;
+    }
   }
 
   Future<void> storeAttendanceData(List<String> presentStudents, List<String> absentStudents) async {
@@ -90,6 +121,7 @@ class _AttendanceListPageState extends State<AttendanceListPage> {
       appBar: AppBar(
         title: const Text('Student List'),
         backgroundColor: Colors.blueAccent,
+
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10.0),
@@ -113,9 +145,10 @@ class _AttendanceListPageState extends State<AttendanceListPage> {
                           onChanged: (value) {
                             setState(() {}); // Trigger rebuild on search input change
                           },
+                          keyboardType: const TextInputType.numberWithOptions(decimal: false), // for numbers only
                           decoration: InputDecoration(
                             border: InputBorder.none,
-                            labelText: 'Search by First Name or Roll No',
+                            labelText: 'Search by Roll No or Name',
                             labelStyle: const TextStyle(color: Colors.white),
                             suffixIcon: IconButton(
                               icon: const Icon(Icons.search, color: Colors.white),
@@ -137,25 +170,36 @@ class _AttendanceListPageState extends State<AttendanceListPage> {
               ),
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
-                child: DropdownButton<String>(
-                  dropdownColor: Colors.blueAccent,
-                  underline: Container(), // Remove the underline
-                  value: _selectedBulkUpdate,
-                  hint: const Text('Bulk Update', style: TextStyle(color: Colors.white)),
-                  onChanged: (value) {
-                    if (value == 'All Present') {
-                      bulkUpdate(true);
-                      _selectedBulkUpdate = 'All Present';
-                    } else if (value == 'All Absent') {
-                      bulkUpdate(false);
-                      _selectedBulkUpdate = 'All Absent';
-                    } else {
-                      _selectedBulkUpdate = null;
-                    }
-                  },
-                  items: const [
-                    DropdownMenuItem(value: 'All Present', child: Text('All Present', style: TextStyle(color: Colors.white))),
-                    DropdownMenuItem(value: 'All Absent', child: Text('All Absent', style: TextStyle(color: Colors.white))),
+                child: Row(
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => VoiceInputScreen(),));
+                      },
+                     child:Text("Voice Search"),
+                    ),
+                    const SizedBox(width: 10),
+                    DropdownButton<String>(
+                      dropdownColor: Colors.blueAccent,
+                      underline: Container(), // Remove the underline
+                      value: _selectedBulkUpdate,
+                      hint: const Text('Bulk Update', style: TextStyle(color: Colors.white)),
+                      onChanged: (value) {
+                        if (value == 'All Present') {
+                          bulkUpdate(true);
+                          _selectedBulkUpdate = 'All Present';
+                        } else if (value == 'All Absent') {
+                          bulkUpdate(false);
+                          _selectedBulkUpdate = 'All Absent';
+                        } else {
+                          _selectedBulkUpdate = null;
+                        }
+                      },
+                      items: const [
+                        DropdownMenuItem(value: 'All Present', child: Text('All Present', style: TextStyle(color: Colors.white))),
+                        DropdownMenuItem(value: 'All Absent', child: Text('All Absent', style: TextStyle(color: Colors.white))),
+                      ],
+                    ),
                   ],
                 ),
               ),
@@ -175,8 +219,9 @@ class _AttendanceListPageState extends State<AttendanceListPage> {
 
                   var filteredDocs = snapshot.data!.docs.where((doc)  {
                     var searchValue = searchController.text.toLowerCase();
+                    var rollNo = doc['rollNo'].toString().toLowerCase();
                     var firstName = doc['firstName'].toString().toLowerCase();
-                    return firstName.contains(searchValue) && doc['role'] == 'Student'; // Filter by role 'Student'
+                    return rollNo.startsWith(searchValue) || firstName.contains(searchValue) && doc['role'] == 'Student'; // Filter by role 'Student' name and rollNO
                   }).toList();
 
                   if (filteredDocs.isNotEmpty) {
@@ -194,10 +239,7 @@ class _AttendanceListPageState extends State<AttendanceListPage> {
                         var fullName = '$capitalizedFirstName $capitalizedMiddleName $capitalizedLastName';
 
                         var studentId = student.id;
-
-                        // Calculate and add roll number to the list
-                        var rollNo = index + 1;
-                        rollNumbers.add(rollNo.toString());
+                        var rollNo = rollNumbers[index];
 
                         // Default attendance status to 'P' (present)
                         attendanceStatusMap.putIfAbsent(studentId, () => 'P');
@@ -207,11 +249,12 @@ class _AttendanceListPageState extends State<AttendanceListPage> {
                             toggleAttendance(studentId);
                           },
                           child: Container(
+                            key: Key(rollNo),
                             height: 60,
                             margin: const EdgeInsets.symmetric(vertical: 8.0),
                             padding: const EdgeInsets.all(12.0),
                             decoration: BoxDecoration(
-                              color: attendanceStatusMap[studentId] == 'P' ? Colors.green : Colors.red,
+                              color: attendanceStatusMap[rollNo] == 'A' || _isNumberInUniqueList(rollNo) ? Colors.red : attendanceStatusMap[studentId] == 'P' ? Colors.green : Colors.red,
                               borderRadius: BorderRadius.circular(10.0),
                             ),
                             child: Row(
@@ -263,6 +306,9 @@ class _AttendanceListPageState extends State<AttendanceListPage> {
         ),
       ),
     );
+
   }
+
 }
 //before before
+

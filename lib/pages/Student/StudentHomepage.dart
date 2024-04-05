@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter/cupertino.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timewise/pages/Teacher/AttendanceReport.dart';
 import 'package:easy_date_timeline/easy_date_timeline.dart';
 import 'package:timewise/pages/attendance/attendance.dart';
@@ -19,10 +20,7 @@ class _StudentHomePageState extends State<StudentHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title:const Text("Home Page"),
-        backgroundColor: Colors.blueAccent,
-      ),
+
       backgroundColor: CupertinoColors.systemGrey4,
       body: SingleChildScrollView(
         child: Padding(
@@ -109,6 +107,7 @@ class _StudentHomePageState extends State<StudentHomePage> {
   }
 
   Widget _yellowContainer(String imageUrl, String title) {
+    double containerWidth = MediaQuery.of(context).size.width * 0.42;
     return GestureDetector(
       onTap: () {
         // Navigate to the specific page based on the title
@@ -143,7 +142,7 @@ class _StudentHomePageState extends State<StudentHomePage> {
           borderRadius: BorderRadius.circular(10),
           color: CupertinoColors.activeBlue,
         ),
-        width: 170,
+        width: containerWidth,
         height: 200,
         child: Column(
           children: [
@@ -175,43 +174,68 @@ class _StudentHomePageState extends State<StudentHomePage> {
   }
 
   Widget _landscapeViewExample() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 15.0),
-          child: Text(
-            'Hello Students!',
-            style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-          ),
-        ),
-        const SizedBox(height: 8),
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 15.0),
-          child: Text(
-            "Ready for today's classes!",
-            style: TextStyle(fontSize: 19),
-          ),
-        ),
-        const SizedBox(height: 16),
-        EasyDateTimeLine(
-          initialDate: DateTime.now(),
-          onDateChange: (selectedDate) {
-            // Handle date change
-          },
-          activeColor: const Color(0xff116A7B),
-          dayProps: const EasyDayProps(
-            landScapeMode: true,
-            activeDayStyle: DayStyle(
-              borderRadius: 48.0,
-            ),
-            dayStructure: DayStructure.dayStrDayNum,
-          ),
-          headerProps: const EasyHeaderProps(
-            dateFormatter: DateFormatter.fullDateDMonthAsStrY(),
-          ),
-        ),
-      ],
+    return FutureBuilder<String>(
+      future: _fetchFNameFromSharedPref(), // Fetch fname from SharedPreferences
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          String fname = snapshot.data!;
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                child: Text(
+                  'Hello $fname',
+                  // Display fname retrieved from SharedPreferences
+                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                ),
+              ),
+              const SizedBox(height: 8),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 15.0),
+                child: Text(
+                  "Ready for today's classes!",
+                  style: TextStyle(fontSize: 19),
+                ),
+              ),
+              const SizedBox(height: 16),
+              EasyDateTimeLine(
+                initialDate: DateTime.now(),
+                onDateChange: (selectedDate) {
+                  // Handle date change
+                },
+                activeColor: const Color(0xff116A7B),
+                dayProps: const EasyDayProps(
+                  landScapeMode: true,
+                  activeDayStyle: DayStyle(
+                    borderRadius: 48.0,
+                  ),
+                  dayStructure: DayStructure.dayStrDayNum,
+                ),
+                headerProps: const EasyHeaderProps(
+                  dateFormatter: DateFormatter.fullDateDMonthAsStrY(),
+                ),
+              ),
+            ],
+          );
+        } else {
+          // Placeholder widget while data is loading
+          return Container(
+            width: double.infinity,
+            height: 200,
+            alignment: Alignment.center,
+            child: CircularProgressIndicator(), // Loading indicator
+          );
+        }
+      },
     );
   }
+}
+Future<String> _fetchFNameFromSharedPref() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String fname = prefs.getString('fname') ?? ''; // Get fname from SharedPreferences
+  if (fname.isNotEmpty) {
+    fname = fname[0].toUpperCase() + fname.substring(1);
+  }
+  return fname;
 }

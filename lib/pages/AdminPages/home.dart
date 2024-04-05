@@ -25,10 +25,12 @@ class Contro extends StatefulWidget {
 }
 
 class _ControState extends State<Contro> {
+  List<String> studentNames = [];
   UserModel loggedInUser = UserModel();
   var role;
   var emaill;
   var id;
+  int rollNo = 1;
 
   @override
   void initState() {
@@ -51,7 +53,58 @@ class _ControState extends State<Contro> {
         }
       });
     }
+    fetchAndPrintStudentNames();
   }
+  Future<void> fetchAndPrintStudentNames() async {
+    QuerySnapshot studentsSnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .orderBy('lastName')
+        .orderBy('firstName')
+        .orderBy('middleName')
+        .get();
+
+    if (studentsSnapshot.docs.isNotEmpty) {
+      List<String> students = [];
+      List<String> studentListWithRollNo = [];
+
+      for (var user in studentsSnapshot.docs) {
+        var role = user['role'];
+        if (role == 'Student') {
+          var userId = user.id;
+          var userData = user.data() as Map<String, dynamic>;
+          if (userData.containsKey('rollNo')) {
+            // If 'rollNo' field exists, update it
+            print('Updating rollNo for user: $userId');
+            await FirebaseFirestore.instance
+                .collection('users')
+                .doc(userId)
+                .update({'rollNo': rollNo})
+                .then((_) => print('RollNo updated for user: $userId'))
+                .catchError((error) => print('Error updating rollNo: $error'));
+          }
+          var lastName = user['lastName'];
+          var firstName = user['firstName'];
+          var middleName = user['middleName'];
+          var fullName = '$lastName $firstName $middleName';
+          students.add(fullName);
+          studentListWithRollNo.add('$rollNo. $fullName');
+          rollNo++;
+        }
+      }
+
+      setState(() {
+        studentNames = students;
+      });
+
+      // Print the sorted list of student names
+      studentNames.forEach((name) => print(name));
+      // Print the sorted list of student names with roll numbers
+      studentListWithRollNo.forEach((name) => print(name));
+
+      // Trigger a rebuild to update the UI with the student list
+    }
+  }
+
 
   Widget routing() {
     if (role == 'Student') {
@@ -62,6 +115,7 @@ class _ControState extends State<Contro> {
       return Teacher(id: id);
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -74,3 +128,5 @@ class _ControState extends State<Contro> {
     );
   }
 }
+
+// anme printing perfect

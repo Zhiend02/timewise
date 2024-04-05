@@ -40,7 +40,7 @@ class _ChatSplashPageState1 extends State<ChatSplashPage1> {
 
       //app bar
       appBar: AppBar(
-
+      automaticallyImplyLeading: false,
       ),
 
       body: Stack(

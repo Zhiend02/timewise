@@ -1,7 +1,8 @@
 import 'package:animated_notch_bottom_bar/animated_notch_bottom_bar/animated_notch_bottom_bar.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:timewise/pages/Teacher/SendMessage.dart';
+import 'package:timewise/pages/Student/calender.dart';
 import 'package:timewise/pages/Teacher/TeacherHomePage.dart';
 import 'package:timewise/pages/Teacher/TeacherProfile.dart';
 import 'package:timewise/pages/chatting/screens/splash_page.dart';
@@ -25,9 +26,12 @@ class _TeacherState extends State<Teacher> {
   final List<Widget> bottomBarPages = [
     const TeacherHomePage(),
     const ChatSplashPage1(),
-    const TeacherHomePage(),
+     MyCalender(),
     const TeacherProfile(),
   ];
+
+  final List<String> pageTitles = ['Home Page', 'Message', 'Calender', 'Profile'];
+  String appBarTitle = 'Home Page';
 
   String id;
   var role;
@@ -65,25 +69,48 @@ class _TeacherState extends State<Teacher> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body:
-      // Center(
-      //   child: Column(
-      //     children: [
-      //       ElevatedButton(
-      //         onPressed: () {Navigator.push(context, MaterialPageRoute(builder: (context) => const Attendance()),);},
-      //           child: const Text("Take Attendance"),),
-      //
-      //       ElevatedButton(
-      //         onPressed: () {Navigator.push(context, MaterialPageRoute(builder: (context) =>   const Login()),);},
-      //         child: const Text("Take Attendance"),),
-      //
-      //
-      //     ],
-      //   ),
-      //       )
-
-
-        PageView(
+      backgroundColor: CupertinoColors.systemGrey4,
+      appBar: (appBarTitle != pageTitles[2]) // Check if app bar title is not 'Calender'
+          ? PreferredSize(
+            preferredSize:const Size.fromHeight(kToolbarHeight + 10.0),
+            child: Padding(
+              padding: const EdgeInsets.only(left: 8.0,right: 8.0,bottom: 8.0,top: 30),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: CupertinoColors.activeBlue,
+                ),
+                child: AppBar(
+                  automaticallyImplyLeading: false,
+                  backgroundColor: Colors.transparent,
+                  elevation: 0,
+                   title: Align(
+                     alignment: Alignment.centerLeft,
+                     child: Row(
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.arrow_back),
+                          onPressed: () {
+                            // Navigate to the home page or perform any action on arrow button press
+                            _pageController.jumpToPage(0); // Go to the home page
+                            setState(() {
+                              appBarTitle = pageTitles[0]; // Update app bar title to Home Page
+                            });
+                          },
+                        ),
+                        Text(appBarTitle),
+                                     ],
+                          ),
+                   ),
+                      ),
+              ),
+            ),
+          )
+          : PreferredSize(
+              preferredSize: Size.zero,
+               child: Container(), // Empty container when app bar title is 'Calender'
+      ),
+      body: PageView(
           controller: _pageController,
           physics: const NeverScrollableScrollPhysics(),
           children: List.generate(bottomBarPages.length, (index) => bottomBarPages[index]),
@@ -100,57 +127,57 @@ class _TeacherState extends State<Teacher> {
           removeMargins: true,
           bottomBarWidth: 500,
           durationInMilliSeconds: 200,
-          bottomBarItems: const [
+          bottomBarItems:  [
 
             BottomBarItem(
-              inActiveItem: Icon(
+              inActiveItem: const Icon(
                 Icons.home_filled,
                 color: Colors.blueGrey,
               ),
-              activeItem: Icon(
+              activeItem: const Icon(
                 Icons.home_filled,
                 color: Colors.blueAccent,
               ),
-              itemLabel: 'Home Page',
+              itemLabel: pageTitles[0],
             ),
 
 
             BottomBarItem(
-              inActiveItem: Icon(
+              inActiveItem: const Icon(
                 Icons.send_and_archive,
                 color: Colors.blueGrey,
               ),
-              activeItem: Icon(
+              activeItem: const Icon(
                 Icons.send_and_archive,
                 color: Colors.blueAccent,
               ),
-              itemLabel: 'Page 2',
+              itemLabel: pageTitles[1],
             ),
 
             ///svg example
             BottomBarItem(
-              inActiveItem: Icon(
+              inActiveItem: const Icon(
                 Icons.calendar_month,
                 color: Colors.blueGrey,
               ),
-              activeItem: Icon(
+              activeItem: const Icon(
                 Icons.calendar_month,
                 color: Colors.blueAccent,
               ),
-              itemLabel: 'Page 3',
+              itemLabel: pageTitles[2],
             ),
 
 
             BottomBarItem(
-              inActiveItem: Icon(
+              inActiveItem: const Icon(
                 Icons.person,
                 color: Colors.blueGrey,
               ),
-              activeItem: Icon(
+              activeItem: const Icon(
                 Icons.person,
                 color: Colors.blueAccent,
               ),
-              itemLabel: 'Page 4',
+              itemLabel: pageTitles[3],
             ),
 
 
@@ -158,6 +185,9 @@ class _TeacherState extends State<Teacher> {
           ],
           onTap: (index) {
             _pageController.jumpToPage(index);
+            setState(() {
+              appBarTitle = pageTitles[index];
+            });
           },
           kIconSize: 24.0,
         )

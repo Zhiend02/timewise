@@ -1,7 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:scrollable_clean_calendar/controllers/clean_calendar_controller.dart';
 import 'package:scrollable_clean_calendar/scrollable_clean_calendar.dart';
 import 'package:scrollable_clean_calendar/utils/enums.dart';
+import 'package:timewise/pages/AdminPages/home.dart';
 
 
 
@@ -45,23 +47,28 @@ class MyCalender extends StatelessWidget {
         ),
       ),
       home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Scrollable Clean Calendar'),
-          actions: [
-            IconButton(
-              onPressed: () {
-                calendarController.clearSelectedDates();
-              },
-              icon: const Icon(Icons.clear),
-            )
-          ],
+        appBar: PreferredSize(
+          preferredSize:const Size.fromHeight(kToolbarHeight + 10.0),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: CupertinoColors.activeBlue,
+              ),
+              child: AppBar(
+                backgroundColor: Colors.transparent,
+                elevation: 0,
+                title:  Row(
+                  children: [
+                    IconButton( onPressed: () {Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage(),));}, icon: const Icon(Icons.arrow_back)),
+                    const Text('Calendar'),
+                  ],
+                ),
+              ),
+            ),
+          ),
         ),
-        // floatingActionButton: FloatingActionButton(
-        //   child: const Icon(Icons.arrow_downward),
-        //   onPressed: () {
-        //     calendarController.jumpToMonth(date: DateTime(2022, 8));
-        //   },
-        // ),
         body: ScrollableCleanCalendar(
           calendarController: calendarController,
           layout: Layout.BEAUTY,

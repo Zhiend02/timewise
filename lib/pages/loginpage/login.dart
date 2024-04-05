@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
@@ -268,11 +269,15 @@ class _LoginPageState extends State<LoginPage> {
 
         // Get the user's document ID from Firestore
         String userId = userCredential.user!.uid; // Assuming Firestore uses UID as document ID
+        // Fetch fname from Firestore using the userId
+        String fname = await fetchFNameFromFirestore(userId);
 
         sharedPref.setString('user_id', userId); // Store the user's document ID with key 'user_id'
+        sharedPref.setString('fname', fname); // Store the user's fname
 
         // Print the user's document ID
         print('User Document ID: $userId');
+        print('User First Name: $fname');
 
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()));
       } on FirebaseAuthException catch (e) {
@@ -302,3 +307,25 @@ class _LoginPageState extends State<LoginPage> {
 
 }
 
+Future<String> fetchFNameFromFirestore(String userId) async {
+  try {
+    // Get the document snapshot from Firestore using the user ID (UID)
+    DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .get();
+
+
+    if (documentSnapshot.exists && documentSnapshot.data() != null) {
+
+      String? fname = documentSnapshot.get('firstName');
+      if (fname != null) {
+        return fname;
+      }
+    }
+    return '';
+  } catch (e) {
+    print('Error fetching fname: $e');
+    return ''; // Return an empty string in case of errors
+  }
+}

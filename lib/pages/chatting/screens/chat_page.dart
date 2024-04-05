@@ -1,8 +1,5 @@
-import 'dart:convert';
-import 'dart:math';
-import 'dart:io';
 
-import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -56,7 +53,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       switch (snapshot.connectionState){
                         case ConnectionState.waiting:
                         case ConnectionState.none:
-                          return SizedBox();
+                          return const SizedBox();
 
                       //if some or all data is loaded then show it
                         case ConnectionState.active:
@@ -114,11 +111,11 @@ class _ChatScreenState extends State<ChatScreen> {
                  IconButton(onPressed: () => Navigator.pop(context), icon: Icon(Icons.arrow_back,color: Colors.black54,)),
 
 
-          Column(
-          children: [
-          CircleAvatar(child: Icon(CupertinoIcons.person),),
-          ],
-          ),
+              const Column(
+                  children: [
+                  CircleAvatar(child: Icon(CupertinoIcons.person),),
+              ],
+              ),
           //for adding some space
           const SizedBox(width: 10),
 
@@ -214,10 +211,10 @@ class _ChatScreenState extends State<ChatScreen> {
                }
             },
             minWidth: 0,
-            padding: EdgeInsets.only(top: 10,bottom: 10, right: 5, left: 10,),
+            padding: const EdgeInsets.only(top: 10,bottom: 10, right: 5, left: 10,),
             shape: const CircleBorder(),
             color: Colors.greenAccent,
-            child: Icon(
+            child: const Icon(
               Icons.send,
               color: Colors.white,
               size: 35,),),

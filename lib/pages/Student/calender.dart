@@ -47,28 +47,28 @@ class MyCalender extends StatelessWidget {
         ),
       ),
       home: Scaffold(
-        appBar: PreferredSize(
-          preferredSize:const Size.fromHeight(kToolbarHeight + 10.0),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: CupertinoColors.activeBlue,
-              ),
-              child: AppBar(
-                backgroundColor: Colors.transparent,
-                elevation: 0,
-                title:  Row(
-                  children: [
-                    IconButton( onPressed: () {Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage(),));}, icon: const Icon(Icons.arrow_back)),
-                    const Text('Calendar'),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
+        // appBar: PreferredSize(
+        //   preferredSize:const Size.fromHeight(kToolbarHeight + 10.0),
+        //   child: Padding(
+        //     padding: const EdgeInsets.all(8.0),
+        //     child: Container(
+        //       decoration: BoxDecoration(
+        //         borderRadius: BorderRadius.circular(10),
+        //         color: CupertinoColors.activeBlue,
+        //       ),
+        //       // child: AppBar(
+        //       //   backgroundColor: Colors.transparent,
+        //       //   elevation: 0,
+        //       //   title:  Row(
+        //       //     children: [
+        //       //       IconButton( onPressed: () {Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage(),));}, icon: const Icon(Icons.arrow_back)),
+        //       //       const Text('Calendar'),
+        //       //     ],
+        //       //   ),
+        //       // ),
+        //     ),
+        //   ),
+        // ),
         body: ScrollableCleanCalendar(
           calendarController: calendarController,
           layout: Layout.BEAUTY,

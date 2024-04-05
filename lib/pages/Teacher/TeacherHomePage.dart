@@ -8,7 +8,6 @@ import 'package:timewise/pages/Teacher/AttendanceReport.dart';
 import 'package:timewise/pages/Teacher/student_export.dart';
 import 'package:easy_date_timeline/easy_date_timeline.dart';
 import 'package:timewise/pages/attendance/attendance.dart';
-import 'package:timewise/pages/attendance/login.dart';
 import 'package:timewise/pages/attendance/voiceattendance.dart';
 import 'package:timewise/pages/chatting/screens/splash_page.dart';
 
@@ -21,6 +20,7 @@ class TeacherHomePage extends StatefulWidget {
 
 class _TeacherHomePageState extends State<TeacherHomePage> {
   final StudentExporter studentExporter = StudentExporter();
+
 
   @override
   Widget build(BuildContext context) {
@@ -175,7 +175,14 @@ class _TeacherHomePageState extends State<TeacherHomePage> {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          color: CupertinoColors.activeBlue,
+          gradient: const LinearGradient(
+            begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors:[
+            Color.fromRGBO(9, 198, 249, 1),
+            Color.fromRGBO(4, 93, 233, 1)
+          ]
+          )
         ),
         width: containerWidth,
         height: 200,
@@ -224,7 +231,7 @@ class _TeacherHomePageState extends State<TeacherHomePage> {
                 child: Text(
                   'Hello $fname',
                   // Display fname retrieved from SharedPreferences
-                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
                 ),
               ),
               const SizedBox(height: 8),
@@ -245,7 +252,17 @@ class _TeacherHomePageState extends State<TeacherHomePage> {
                 dayProps: const EasyDayProps(
                   landScapeMode: true,
                   activeDayStyle: DayStyle(
-                    borderRadius: 48.0,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(48.0)),
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Color.fromRGBO(208, 163, 255, 1),
+                          Color.fromRGBO(159, 74, 247, 1)
+                        ]
+                      )
+                    )
                   ),
                   dayStructure: DayStructure.dayStrDayNum,
                 ),
@@ -261,7 +278,7 @@ class _TeacherHomePageState extends State<TeacherHomePage> {
             width: double.infinity,
             height: 200,
             alignment: Alignment.center,
-            child: CircularProgressIndicator(), // Loading indicator
+            child: const CircularProgressIndicator(), // Loading indicator
           );
         }
       },

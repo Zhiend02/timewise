@@ -62,45 +62,54 @@ class _AdminState extends State<Admin> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: CupertinoColors.systemGrey4,
-      appBar: (appBarTitle != pageTitles[2]) // Check if app bar title is not 'Calender'
-          ? PreferredSize(
-        preferredSize:const Size.fromHeight(kToolbarHeight + 10.0),
-        child: Padding(
-          padding: const EdgeInsets.only(left: 8.0,right: 8.0,bottom: 8.0,top: 30),
-          child: Container(
-            decoration: BoxDecoration(
+      appBar: PreferredSize(
+        preferredSize:const Size.fromHeight(kToolbarHeight + 15.0),
+        child: Container(
+          decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              color: CupertinoColors.activeBlue,
-            ),
-            child: AppBar(
-              automaticallyImplyLeading: false,
-              backgroundColor: Colors.transparent,
-              elevation: 0,
-              title: Align(
-                alignment: Alignment.centerLeft,
-                child: Row(
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.arrow_back),
-                      onPressed: () {
-                        // Navigate to the home page or perform any action on arrow button press
-                        _pageController.jumpToPage(0); // Go to the home page
-                        setState(() {
-                          appBarTitle = pageTitles[0]; // Update app bar title to Home Page
-                        });
-                      },
-                    ),
-                    Text(appBarTitle),
-                  ],
+              gradient: const LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors:[
+                    Color.fromRGBO(9, 198, 249, 1),
+                    Color.fromRGBO(4, 93, 233, 1)
+                  ]
+              )
+          ),
+          child: AppBar(
+            automaticallyImplyLeading: false,
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            title: Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 25.0,left: 8.0),
+                  child: IconButton(
+                    icon: const Icon(Icons.arrow_back),
+                    onPressed: () {
+                      // Navigate to the home page or perform any action on arrow button press
+                      _pageController.jumpToPage(0); // Go to the home page
+                      setState(() {
+                        appBarTitle = pageTitles[0]; // Update app bar title to Home Page
+                      });
+                    },
+                  ),
                 ),
-              ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 25.0, right: 8.0),
+                    child: Align(
+                        alignment: Alignment.topLeft,
+                        child: Text(appBarTitle,
+                          textAlign:TextAlign.start ,
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        )),
+                  ),
+                ),
+              ],
             ),
           ),
         ),
-      )
-          : PreferredSize(
-        preferredSize: Size.zero,
-        child: Container(), // Empty container when app bar title is 'Calender'
       ),
     body: PageView(
       controller: _pageController,

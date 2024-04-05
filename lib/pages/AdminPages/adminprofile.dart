@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:timewise/pages/AdminPages/admin.dart';
 import 'package:timewise/pages/loginpage/logoutpage.dart';
@@ -47,91 +48,95 @@ class _AdminProfileState extends State<AdminProfile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
+      backgroundColor: CupertinoColors.systemGrey4,
+      body: Padding(
+        padding: const EdgeInsets.only(top:8.0),
+        child: Stack(
+          children: [
 
-          Container(
-            width: double.infinity,
-            height: 400,
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/images/background.png'),
-                fit: BoxFit.cover,
+            Container(
+              width: double.infinity,
+              height: 400,
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/images/background.png'),
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Container(
-                child: const Text("PROFILE",style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold),)),
-          ),
-          CustomMultiChildLayout(
-            delegate: ProfileLayoutDelegate(),
-            children: [
-              LayoutId(
-                id: 'redContainer',
-                child: Container(
-                  width: 370,
-                  height: 550,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
-                        blurRadius: 10,
-                        offset: const Offset(0, 5),
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      const SizedBox(height: 30), // Spacer
-                      const Padding(
-                        padding: EdgeInsets.only(left: 15.0),
-                        child: Text("Personal Information",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
-                      ),
-                      _buildIconContainer(Icons.account_circle, 'First Name : ',_firstName),
-                      _buildIconContainer(Icons.account_circle, 'Middle Name : ',_middleName),
-                      _buildIconContainer(Icons.account_circle, 'Last Name : ',_lastName),
-                      _buildIconContainer(Icons.email, 'Email : ',_email),
-                      const SizedBox(height:30),
-
-                      Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Container(
-                          child: ElevatedButton(onPressed: (){logout(context);},
-                              style:ElevatedButton.styleFrom(
-                                  padding: const EdgeInsets.symmetric(vertical: 20.0),
-                                  backgroundColor: Colors.blueAccent,
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))
-
-                              ) ,
-                              child: const Text("log out",style: TextStyle(fontSize: 20),)),
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Container(
+                  child: const Text("PROFILE",style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold),)),
+            ),
+            CustomMultiChildLayout(
+              delegate: ProfileLayoutDelegate(),
+              children: [
+                LayoutId(
+                  id: 'redContainer',
+                  child: Container(
+                    width: 370,
+                    height: 550,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.2),
+                          blurRadius: 10,
+                          offset: const Offset(0, 5),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        const SizedBox(height: 30), // Spacer
+                        const Padding(
+                          padding: EdgeInsets.only(left: 15.0),
+                          child: Text("Personal Information",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+                        ),
+                        _buildIconContainer(Icons.account_circle, 'First Name : ',_firstName),
+                        _buildIconContainer(Icons.account_circle, 'Middle Name : ',_middleName),
+                        _buildIconContainer(Icons.account_circle, 'Last Name : ',_lastName),
+                        _buildIconContainer(Icons.email, 'Email : ',_email),
+                        const SizedBox(height:30),
+
+                        Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Container(
+                            child: ElevatedButton(onPressed: (){logout(context);},
+                                style:ElevatedButton.styleFrom(
+                                    padding: const EdgeInsets.symmetric(vertical: 20.0),
+                                    backgroundColor: Colors.blueAccent,
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))
+
+                                ) ,
+                                child: const Text("log out",style: TextStyle(fontSize: 20),)),
+                          ),
+                        ),
+                      ],
+
+                    ),
 
                   ),
-
                 ),
-              ),
-              LayoutId(
-                id: 'circle',
-                child: Container(
-                  width: 200,
-                  height: 200,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.grey,
+                LayoutId(
+                  id: 'circle',
+                  child: Container(
+                    width: 200,
+                    height: 200,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.grey,
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-        ],
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

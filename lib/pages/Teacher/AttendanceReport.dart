@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:timewise/pages/attendance/AttendanceCSVExporter.dart';
+
+import '../attendance/print.dart';
 
 class AttendanceReport extends StatefulWidget {
   const AttendanceReport({Key? key}) : super(key: key);
@@ -15,23 +16,18 @@ class _AttendanceReportState extends State<AttendanceReport> {
   DateTime startDate = DateTime.now();
   DateTime endDate = DateTime.now();
 
-  Future<void> _downloadCSV(BuildContext context) async {
-    final exporter = AttendanceCSVExporter();
-    final csvPath = await exporter.downloadCSV(selectedSession, 'Regular', startDate, endDate);
-
-    if (csvPath != null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('CSV file downloaded successfully: $csvPath'),
+  Future<void> _printData(BuildContext context) async {
+    // Pass session, start date, and end date to the next file
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PrintData(
+          session: selectedSession,
+          startDate: startDate,
+          endDate: endDate,
         ),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Error downloading CSV file.'),
-        ),
-      );
-    }
+      ),
+    );
   }
 
   @override
@@ -55,7 +51,7 @@ class _AttendanceReportState extends State<AttendanceReport> {
           child: AppBar(
             backgroundColor: Colors.transparent,
             elevation: 0,
-            title: const Text('Download CSV'),
+            title: const Text('Print Data'),
           ),
         ),
       ),
@@ -112,7 +108,7 @@ class _AttendanceReportState extends State<AttendanceReport> {
                     }
                   },
                   style: ElevatedButton.styleFrom(
-                    primary: const Color.fromRGBO(51, 172, 73,1),
+                    primary: const Color.fromRGBO(51, 172, 73, 1),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -148,7 +144,7 @@ class _AttendanceReportState extends State<AttendanceReport> {
                     }
                   },
                   style: ElevatedButton.styleFrom(
-                    primary: const Color.fromRGBO(51, 172, 73,1),
+                    primary: const Color.fromRGBO(51, 172, 73, 1),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -169,10 +165,10 @@ class _AttendanceReportState extends State<AttendanceReport> {
                 padding: const EdgeInsets.symmetric(vertical: 10.0),
                 child: ElevatedButton(
                   onPressed: () {
-                    _downloadCSV(context);
+                    _printData(context);
                   },
                   style: ElevatedButton.styleFrom(
-                    primary: const Color.fromRGBO(51, 172, 73,1),
+                    primary: const Color.fromRGBO(51, 172, 73, 1),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -181,7 +177,7 @@ class _AttendanceReportState extends State<AttendanceReport> {
                   child: const SizedBox(
                     width: double.infinity,
                     child: Text(
-                      'Download CSV',
+                      'Print Data',
                       textAlign: TextAlign.center,
                       style: TextStyle(color: Colors.white),
                     ),

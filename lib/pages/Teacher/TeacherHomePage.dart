@@ -10,6 +10,7 @@ import 'package:easy_date_timeline/easy_date_timeline.dart';
 import 'package:timewise/pages/attendance/attendance.dart';
 import 'package:timewise/pages/attendance/voiceattendance.dart';
 import 'package:timewise/pages/chatting/screens/splash_page.dart';
+import 'package:timewise/pages/wifi%20toggle.dart';
 
 class TeacherHomePage extends StatefulWidget {
   const TeacherHomePage({Key? key}) : super(key: key);
@@ -167,7 +168,7 @@ class _TeacherHomePageState extends State<TeacherHomePage> {
         else if (title == 'Attendance Dashboard') {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) =>  VoiceInputScreen()),
+            MaterialPageRoute(builder: (context) =>   WifiToggle()),
           );
         }
         // Add more conditions for other titles and pages as needed
@@ -255,12 +256,12 @@ class _TeacherHomePageState extends State<TeacherHomePage> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(48.0)),
                       gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
-                          Color.fromRGBO(208, 163, 255, 1),
-                          Color.fromRGBO(159, 74, 247, 1)
-                        ]
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors:[
+                            Color.fromRGBO(9, 198, 249, 1),
+                            Color.fromRGBO(4, 93, 233, 1)
+                          ]
                       )
                     )
                   ),

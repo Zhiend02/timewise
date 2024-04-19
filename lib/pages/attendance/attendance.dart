@@ -62,18 +62,37 @@ class _AttendanceState extends State<Attendance> {
   @override
   Widget build(BuildContext context) {
     Color buttonColor = (session != null && lectureType != null && subject != null)
-        ? Colors.green
+        ? const Color.fromRGBO(51, 172, 73,1)
         : Colors.grey; // Set button color based on field selection
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Attendance'),
-        backgroundColor: Colors.blueAccent,
+      backgroundColor: CupertinoColors.systemGrey5,
+      appBar: PreferredSize(
+              preferredSize: const Size.fromHeight(kToolbarHeight + 15.0),
+          child: Container(
+              decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              gradient: const LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+              Color.fromRGBO(9, 198, 249, 1),
+              Color.fromRGBO(4, 93, 233, 1),
+              ],
+              ),
+              ),
+             child: AppBar(
+               backgroundColor: Colors.transparent,
+               elevation: 0,
+                title: const Text('Attendance'),
+
+        ),
+      ),
       ),
 
 
 
-      body: Padding(
+        body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -81,8 +100,8 @@ class _AttendanceState extends State<Attendance> {
             Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10.0),
-                border: Border.all(color: Colors.grey),
-                color: Colors.grey
+                border: Border.all(color: Colors.white),
+                color: Colors.white
               ),
               padding: const EdgeInsets.symmetric(horizontal: 10.0),
 
@@ -119,8 +138,8 @@ class _AttendanceState extends State<Attendance> {
             Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10.0),
-                border: Border.all(color: Colors.grey),
-                  color: Colors.grey
+                border: Border.all(color: Colors.white),
+                  color: Colors.white
               ),
               padding: const EdgeInsets.symmetric(horizontal: 10.0),
               child: DropdownButtonFormField<String>(
@@ -158,8 +177,8 @@ class _AttendanceState extends State<Attendance> {
             Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10.0),
-                border: Border.all(color: Colors.grey),
-                  color: Colors.grey
+                border: Border.all(color: Colors.white),
+                  color: Colors.white
               ),
               padding: const EdgeInsets.symmetric(horizontal: 10.0),
               child: DropdownButtonFormField<String>(
@@ -211,7 +230,7 @@ class _AttendanceState extends State<Attendance> {
                       }
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blueAccent,
+                      backgroundColor:const Color.fromRGBO(51, 172, 73,1),
                       padding: const EdgeInsets.symmetric(vertical: 10.0,horizontal: 20.0),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),
@@ -249,7 +268,7 @@ class _AttendanceState extends State<Attendance> {
                       }
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blueAccent,
+                      backgroundColor:const Color.fromRGBO(51, 172, 73,1),
                       padding: const EdgeInsets.symmetric(vertical: 10.0,horizontal: 20.0),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),
@@ -306,6 +325,7 @@ class _AttendanceState extends State<Attendance> {
                 style: TextStyle(
                   fontSize: 18.0,
                   fontWeight: FontWeight.bold,
+                  color: Colors.black
                 ),
               ),
             ),

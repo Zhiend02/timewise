@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:permission_handler/permission_handler.dart';
@@ -52,27 +53,56 @@ class _VoiceInputScreenState extends State<VoiceInputScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Voice Input'),
+      backgroundColor: CupertinoColors.systemGrey5,
+      appBar: PreferredSize(
+
+        preferredSize: const Size.fromHeight(kToolbarHeight + 15.0),
+          child: Container(
+              decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              gradient: const LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+              Color.fromRGBO(9, 198, 249, 1),
+              Color.fromRGBO(4, 93, 233, 1),
+              ],
+              ),
+              ),
+            child: AppBar(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              title:const Text('Voice Input'),
+        ),
+      ),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(_text),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
+
+              style: ElevatedButton.styleFrom(
+                elevation: 0,
+                backgroundColor: CupertinoColors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12), // Border radius
+                ),
+                minimumSize: const Size(double.infinity, 50),// Increase height
+              ),
               onPressed: _isListening ? _stopListening : _startListening,
               child: Text(_isListening
                   ? 'Stop Listening'
                   : '$_statusMessage'), // Display status message
             ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {}, // Placeholder button, no action required
-              child: Text('Print Numbers List Automatically'), // Text changed
-
-            ),
+            const SizedBox(height: 20),
+            // ElevatedButton(
+            //   onPressed: () {}, // Placeholder button, no action required
+            //   child: Text('Print Numbers List Automatically'), // Text changed
+            //
+            // ),
 
           ],
         ),

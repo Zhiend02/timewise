@@ -1,3 +1,4 @@
+
 import 'dart:convert';
 import 'dart:io';
 
@@ -50,7 +51,7 @@ class AttendanceCSVExporter {
 
       // Create CSV format with subject columns
       List<List<dynamic>> csvData = [
-        ['Student Name', ...subjectsList]
+        ['Student Name', ...subjectsList,'Total conducted','total present','attendance']
       ];
 
       studentData.forEach((student) {

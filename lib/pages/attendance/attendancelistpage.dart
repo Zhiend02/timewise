@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:timewise/pages/attendance/voiceattendance.dart';
@@ -37,6 +38,7 @@ class _AttendanceListPageState extends State<AttendanceListPage> {
   late Stream<QuerySnapshot> _studentStream;
   List<String> rollNumbers = [];
   Map<String, String> attendanceStatusMap = {}; // Map to store attendance status ('P' for present, 'A' for absent)
+  bool hideText = false;
 
   String? _selectedBulkUpdate;
 
@@ -49,7 +51,7 @@ class _AttendanceListPageState extends State<AttendanceListPage> {
         .snapshots();
     fetchRollNumbers();
     print(globals.UniqueNumbersList);
-    
+
   }
   void fetchRollNumbers() async {
     QuerySnapshot rollNumbersSnapshot = await FirebaseFirestore.instance
@@ -93,7 +95,8 @@ class _AttendanceListPageState extends State<AttendanceListPage> {
 
   Future<void> storeAttendanceData(List<String> presentStudents, List<String> absentStudents) async {
     try {
-      await FirebaseFirestore.instance.collection('attendance_records').add({
+      String collectionName = widget.session == 'Odd' ? 'record_odd' : 'record_even';
+      await FirebaseFirestore.instance.collection(collectionName).add({
         'date': widget.date,
         'time': widget.time,
         'duration': widget.duration,
@@ -119,10 +122,29 @@ class _AttendanceListPageState extends State<AttendanceListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Student List'),
-        backgroundColor: Colors.blueAccent,
+      backgroundColor: CupertinoColors.systemGrey5,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(kToolbarHeight + 15.0),
+          child: Container(
+              decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              gradient: const LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+              Color.fromRGBO(9, 198, 249, 1),
+              Color.fromRGBO(4, 93, 233, 1),
+                  ],
+                  ),
+                  ),
 
+            child: AppBar(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              title: const Text('Student List'),
+
+        ),
+      ),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10.0),
@@ -131,78 +153,107 @@ class _AttendanceListPageState extends State<AttendanceListPage> {
           children: [
             Padding(
               padding: const EdgeInsets.only(top: 10.0),
-              child: Row(
+              child:Row(
                 children: [
                   Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.blue[100],
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 10.0),
-                        child: TextField(
-                          controller: searchController,
-                          onChanged: (value) {
-                            setState(() {}); // Trigger rebuild on search input change
-                          },
-                          keyboardType: const TextInputType.numberWithOptions(decimal: false), // for numbers only
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            labelText: 'Search by Roll No or Name',
-                            labelStyle: const TextStyle(color: Colors.white),
-                            suffixIcon: IconButton(
-                              icon: const Icon(Icons.search, color: Colors.white),
-                              onPressed: () {}, // No need to handle this separately
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          hideText = true; // Hide the text when tapped
+                        });
+                      },
+                        child: DecoratedBox(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                           color: CupertinoColors.white,
+                          ),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 10.0),
+                          child: hideText
+                              ? const SizedBox() // Placeholder when text is hidden
+                              : TextField(
+                                controller: searchController,
+                                  onChanged: (value) {
+                                   setState(() {}); // Trigger rebuild on search input change
+                            },
+                                keyboardType: const TextInputType.numberWithOptions(decimal: false), // for numbers only
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  labelText: 'Search by Roll No',
+                                  labelStyle: const TextStyle(color: Colors.black),
+                                  suffixIcon: IconButton(
+                                    icon: const Icon(Icons.search, color: Colors.black),
+                                    onPressed: () {}, // No need to handle this separately
+                              ),
                             ),
                           ),
                         ),
                       ),
                     ),
                   ),
-                ],
+                  )],
               ),
             ),
             const SizedBox(height: 20),
             Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.blue[100],
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Row(
-                  children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => VoiceInputScreen(),));
-                      },
-                     child:Text("Voice Search"),
+              child: Row(
+                children: [
+                  ElevatedButton(
+
+                    onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => VoiceInputScreen(),));
+                    },
+                    style: ElevatedButton.styleFrom(
+                      elevation: 0,
+                      padding: const EdgeInsets.all( 12.0),
+                     backgroundColor: CupertinoColors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12), // Border radius
+                      ), // Increase height
                     ),
-                    const SizedBox(width: 10),
-                    DropdownButton<String>(
-                      dropdownColor: Colors.blueAccent,
-                      underline: Container(), // Remove the underline
-                      value: _selectedBulkUpdate,
-                      hint: const Text('Bulk Update', style: TextStyle(color: Colors.white)),
-                      onChanged: (value) {
-                        if (value == 'All Present') {
-                          bulkUpdate(true);
-                          _selectedBulkUpdate = 'All Present';
-                        } else if (value == 'All Absent') {
-                          bulkUpdate(false);
-                          _selectedBulkUpdate = 'All Absent';
-                        } else {
-                          _selectedBulkUpdate = null;
-                        }
-                      },
-                      items: const [
-                        DropdownMenuItem(value: 'All Present', child: Text('All Present', style: TextStyle(color: Colors.white))),
-                        DropdownMenuItem(value: 'All Absent', child: Text('All Absent', style: TextStyle(color: Colors.white))),
-                      ],
+                   child:const Text("Voice Search",
+                     style: TextStyle(
+                       color: Colors.black, // Text color
+                       fontSize: 16, // Text size
+                     ),),
+                  ),
+                  const SizedBox(width: 70),
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: CupertinoColors.white,
                     ),
-                  ],
-                ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      child: DropdownButton<String>(
+                        dropdownColor: Colors.blueAccent,
+                        underline: Container(), // Remove the underline
+                        value: _selectedBulkUpdate,
+                        hint: const Text('Bulk Update', style: TextStyle(color: Colors.black)),
+                        onChanged: (value) {
+                          if (value == 'All Present') {
+                            bulkUpdate(true);
+                            _selectedBulkUpdate = 'All Present';
+                          } else if (value == 'All Absent') {
+                            bulkUpdate(false);
+                            _selectedBulkUpdate = 'All Absent';
+                          } else {
+                            _selectedBulkUpdate = null;
+                          }
+                        },
+                        items: const [
+                          DropdownMenuItem(value: 'All Present', child: Text('All Present', style: TextStyle(color: Colors.black))),
+                          DropdownMenuItem(value: 'All Absent', child: Text('All Absent', style: TextStyle(color: Colors.black))),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             const SizedBox(height: 10), // Added space for separation

@@ -243,11 +243,11 @@ class _AdminHomePageState extends State<AdminHomePage> {
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(48.0)),
                           gradient: LinearGradient(
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                              colors: [
-                                Color.fromRGBO(208, 163, 255, 1),
-                                Color.fromRGBO(159, 74, 247, 1)
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors:[
+                                Color.fromRGBO(9, 198, 249, 1),
+                                Color.fromRGBO(4, 93, 233, 1)
                               ]
                           )
                       )

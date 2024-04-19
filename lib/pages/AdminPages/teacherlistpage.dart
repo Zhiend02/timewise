@@ -25,9 +25,27 @@ class _TeacherListPageState extends State<TeacherListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Student List'),
-        backgroundColor: CupertinoColors.activeBlue,
+      backgroundColor: CupertinoColors.systemGrey5,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(kToolbarHeight + 15.0),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            gradient: const LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Color.fromRGBO(9, 198, 249, 1),
+                Color.fromRGBO(4, 93, 233, 1),
+              ],
+            ),
+          ),
+          child: AppBar(
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            title: const Text('Teacher List'),
+          ),
+        ),
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: _studentStream,
@@ -77,14 +95,32 @@ class _TeacherListPageState extends State<TeacherListPage> {
                         ),
                       );
                     },
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(vertical: 5),
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        borderRadius: BorderRadius.circular(10),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                      child: Container(
+                        height: 65,
+                        margin: const EdgeInsets.symmetric(vertical: 5),
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: CupertinoColors.white
+                        ),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                child: Text(fullName,
+                                  style: const TextStyle(
+                                      fontSize: 20
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
-                      child: Text(fullName),
                     ),
                   );
                 },

@@ -25,12 +25,31 @@ class _StudentListPageState extends State<StudentListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Student List'),
-        backgroundColor: CupertinoColors.activeBlue,
+      backgroundColor: CupertinoColors.systemGrey5,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(kToolbarHeight + 15.0),
+    child: Container(
+    decoration: BoxDecoration(
+    borderRadius: BorderRadius.circular(10),
+    gradient: const LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [
+    Color.fromRGBO(9, 198, 249, 1),
+    Color.fromRGBO(4, 93, 233, 1),
+    ],
+    ),
+    ),
+        child: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          title: const Text('Student List'),
+        ),
       ),
+      ),
+
       body: Container(
-        color: CupertinoColors.systemGrey,
+
         child: StreamBuilder<QuerySnapshot>(
           stream: _studentStream,
           builder: (context, snapshot) {

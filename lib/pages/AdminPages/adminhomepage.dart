@@ -10,6 +10,8 @@ import 'package:easy_date_timeline/easy_date_timeline.dart';
 import 'package:timewise/pages/chatting/screens/splash_page.dart';
 import 'package:timewise/pages/loginpage/register.dart';
 
+import '../calender/screens/home_page.dart';
+
 class AdminHomePage extends StatefulWidget {
   const AdminHomePage({super.key});
 
@@ -139,7 +141,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
         }else if (title == 'Calender') {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => MyCalender()),
+            MaterialPageRoute(builder: (context) =>const CalenderHomePage()),
           );
         }
         else if (title == 'Send Notification') {

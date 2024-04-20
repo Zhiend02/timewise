@@ -12,6 +12,8 @@ import 'package:timewise/pages/attendance/voiceattendance.dart';
 import 'package:timewise/pages/chatting/screens/splash_page.dart';
 import 'package:timewise/pages/wifi%20toggle.dart';
 
+import '../calender/screens/home_page.dart';
+
 class TeacherHomePage extends StatefulWidget {
   const TeacherHomePage({Key? key}) : super(key: key);
 
@@ -146,7 +148,7 @@ class _TeacherHomePageState extends State<TeacherHomePage> {
         else if (title == 'Calender') {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => MyCalender()),
+            MaterialPageRoute(builder: (context) => const CalenderHomePage()),
           );
         }
         else if (title == 'Send Notification') {

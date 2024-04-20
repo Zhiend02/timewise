@@ -7,6 +7,7 @@ import 'package:easy_date_timeline/easy_date_timeline.dart';
 import 'package:timewise/pages/attendance/attendance.dart';
 import 'package:timewise/pages/attendance/loginclient.dart';
 
+import '../calender/screens/home_page.dart';
 import '../chatting/screens/splash_page.dart';
 import 'calender.dart';
 class StudentHomePage extends StatefulWidget {
@@ -120,7 +121,7 @@ class _StudentHomePageState extends State<StudentHomePage> {
         else if (title == 'Calender') {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) =>  MyCalender()),
+            MaterialPageRoute(builder: (context) =>  const CalenderHomePage()),
           );
         }
         else if (title == 'Send Notification') {

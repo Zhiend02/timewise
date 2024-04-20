@@ -6,6 +6,7 @@ import 'package:timewise/pages/AdminPages/adminhomepage.dart';
 import 'package:timewise/pages/AdminPages/adminprofile.dart';
 import 'package:timewise/pages/Student/calender.dart';
 import 'package:timewise/pages/chatting/screens/splash_page.dart';
+import '../calender/screens/home_page.dart';
 import 'model.dart';
 import 'package:animated_notch_bottom_bar/animated_notch_bottom_bar/animated_notch_bottom_bar.dart';
 class Admin extends StatefulWidget {
@@ -25,7 +26,7 @@ class _AdminState extends State<Admin> {
   final List<Widget> bottomBarPages = [
     const AdminHomePage(),
     const ChatSplashPage1(),
-     MyCalender(),
+   const CalenderHomePage(),
     const AdminProfile(),
   ];
 

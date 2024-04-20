@@ -8,6 +8,7 @@ import 'package:timewise/pages/Teacher/TeacherProfile.dart';
 import 'package:timewise/pages/chatting/screens/splash_page.dart';
 
 import '../AdminPages/model.dart';
+import '../calender/screens/home_page.dart';
 
 class Teacher extends StatefulWidget {
   String id;
@@ -26,7 +27,7 @@ class _TeacherState extends State<Teacher> {
   final List<Widget> bottomBarPages = [
     const TeacherHomePage(),
     const ChatSplashPage1(),
-     MyCalender(),
+    const CalenderHomePage(),
     const TeacherProfile(),
   ];
 

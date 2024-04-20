@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:timewise/pages/Student/calender.dart';
 import 'package:timewise/pages/Student/studentprofile.dart';
+import '../calender/screens/home_page.dart';
 import '../chatting/screens/splash_page.dart';
 import 'StudentHomepage.dart';
 import '../AdminPages/model.dart';
@@ -30,7 +31,7 @@ class _StudentState extends State<Student> {
   final List<Widget> bottomBarPages = [
     const StudentHomePage.student(),
     const ChatSplashPage1(),
-          MyCalender(),
+   const CalenderHomePage(),
     const StudentProfile(),
   ];
 

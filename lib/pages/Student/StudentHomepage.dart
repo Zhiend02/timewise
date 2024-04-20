@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:timewise/pages/Teacher/AttendanceReport.dart';
+import 'package:timewise/pages/report/AttendanceReport.dart';
 import 'package:easy_date_timeline/easy_date_timeline.dart';
 import 'package:timewise/pages/attendance/attendance.dart';
 import 'package:timewise/pages/attendance/loginclient.dart';
@@ -132,7 +132,7 @@ class _StudentHomePageState extends State<StudentHomePage> {
         else if (title == 'Attendance Dashboard') {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) =>  const Loginc()),
+            MaterialPageRoute(builder: (context) =>  const IndividualReport1()),
           );
         }
         // Add more conditions for other titles and pages as needed
@@ -166,7 +166,7 @@ class _StudentHomePageState extends State<StudentHomePage> {
             const SizedBox(width: 40),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 18.0,horizontal: 10),
+                padding: const EdgeInsets.symmetric(vertical: 15.0,horizontal: 10),
                 child: Text(
                   title,
                   style: const TextStyle(fontSize: 20,fontWeight:FontWeight.w600 ),

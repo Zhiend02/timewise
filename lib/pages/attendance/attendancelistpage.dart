@@ -203,30 +203,32 @@ class _AttendanceListPageState extends State<AttendanceListPage> {
             Container(
               child: Row(
                 children: [
-                  ElevatedButton(
+                  AnimatedButton(
 
                     onPressed: () {
                       Navigator.push(context, MaterialPageRoute(builder: (context) => VoiceInputScreen(),));
                     },
-                    style: ElevatedButton.styleFrom(
-                      elevation: 0,
-                      padding: const EdgeInsets.all( 12.0),
-                     backgroundColor: CupertinoColors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12), // Border radius
-                      ), // Increase height
+                    gradient:const LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        Color.fromRGBO(9, 198, 249, 1),
+                        Color.fromRGBO(4, 93, 233, 1),
+                      ],
                     ),
-                   child:const Text("Voice Search",
-                     style: TextStyle(
-                       color: Colors.black, // Text color
-                       fontSize: 16, // Text size
-                     ),),
+                   text:"Voice Search",
+
                   ),
                   const SizedBox(width: 70),
                   Container(
+                    height: 51,
+                    width: 150,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: CupertinoColors.white,
+                      gradient: const LinearGradient( colors: [
+                        Color.fromRGBO(9, 198, 249, 1),
+                        Color.fromRGBO(4, 93, 233, 1),
+                      ],)
                     ),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10.0),
@@ -234,7 +236,7 @@ class _AttendanceListPageState extends State<AttendanceListPage> {
                         dropdownColor: Colors.blueAccent,
                         underline: Container(), // Remove the underline
                         value: _selectedBulkUpdate,
-                        hint: const Text('Bulk Update', style: TextStyle(color: Colors.black)),
+                        hint: const Text('Bulk Update', style: TextStyle(color: Colors.white)),
                         onChanged: (value) {
                           if (value == 'All Present') {
                             bulkUpdate(true);
@@ -247,8 +249,8 @@ class _AttendanceListPageState extends State<AttendanceListPage> {
                           }
                         },
                         items: const [
-                          DropdownMenuItem(value: 'All Present', child: Text('All Present', style: TextStyle(color: Colors.black))),
-                          DropdownMenuItem(value: 'All Absent', child: Text('All Absent', style: TextStyle(color: Colors.black))),
+                          DropdownMenuItem(value: 'All Present', child: Text('All Present', style: TextStyle(color: Colors.white))),
+                          DropdownMenuItem(value: 'All Absent', child: Text('All Absent', style: TextStyle(color: Colors.white))),
                         ],
                       ),
                     ),
@@ -365,3 +367,39 @@ class _AttendanceListPageState extends State<AttendanceListPage> {
 }
 //before before
 
+class AnimatedButton extends StatelessWidget {
+  final VoidCallback onPressed;
+  final String text;
+  final LinearGradient gradient;
+
+  const AnimatedButton({
+    Key? key,
+    required this.onPressed,
+    required this.text,
+    required this.gradient,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 1000),
+      curve: Curves.easeInOut,
+      width: 150,
+      height: 50,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        gradient: gradient,
+      ),
+      child: MaterialButton(
+        onPressed: onPressed,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Text(
+          text,
+          style: const TextStyle(color: Colors.white),
+        ),
+      ),
+    );
+  }
+}

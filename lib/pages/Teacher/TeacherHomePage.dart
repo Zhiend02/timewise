@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timewise/pages/AdminPages/StudentListPage.dart';
 import 'package:timewise/pages/Student/calender.dart';
-import 'package:timewise/pages/Teacher/AttendanceReport.dart';
+import 'package:timewise/pages/report/AttendanceReport.dart';
 import 'package:timewise/pages/Teacher/student_export.dart';
 import 'package:easy_date_timeline/easy_date_timeline.dart';
 import 'package:timewise/pages/attendance/attendance.dart';
@@ -110,11 +110,7 @@ class _TeacherHomePageState extends State<TeacherHomePage> {
                           'List of Students'
 
                       ),
-                      _yellowContainer(
-                          'assets/images/dashboard.png',
-                          'Attendance Dashboard'
 
-                      ),
                     ],
                   ),
                   const SizedBox(height: 100,),
@@ -165,12 +161,7 @@ class _TeacherHomePageState extends State<TeacherHomePage> {
             MaterialPageRoute(builder: (context) => StudentListPage()),
           );
         }
-        else if (title == 'Attendance Dashboard') {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) =>   WifiToggle()),
-          );
-        }
+
         // Add more conditions for other titles and pages as needed
       },
       child: Container(
@@ -203,7 +194,7 @@ class _TeacherHomePageState extends State<TeacherHomePage> {
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.symmetric(
-                    vertical: 18.0, horizontal: 10),
+                    vertical: 15.0, horizontal: 10),
                 child: Text(
                   title,
                   style: const TextStyle(

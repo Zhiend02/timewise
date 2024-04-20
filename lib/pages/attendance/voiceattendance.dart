@@ -82,20 +82,23 @@ class _VoiceInputScreenState extends State<VoiceInputScreen> {
           children: [
             Text(_text),
             const SizedBox(height: 20),
-            ElevatedButton(
+            AnimatedButton(
 
-              style: ElevatedButton.styleFrom(
-                elevation: 0,
-                backgroundColor: CupertinoColors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12), // Border radius
+
+                gradient:const LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    Color.fromRGBO(9, 198, 249, 1),
+                    Color.fromRGBO(4, 93, 233, 1),
+                  ],
                 ),
-                minimumSize: const Size(double.infinity, 50),// Increase height
-              ),
+              // Increase height
+
               onPressed: _isListening ? _stopListening : _startListening,
-              child: Text(_isListening
+             text:_isListening
                   ? 'Stop Listening'
-                  : '$_statusMessage'), // Display status message
+                  : '$_statusMessage' // Display status message
             ),
             const SizedBox(height: 20),
             // ElevatedButton(
@@ -190,3 +193,40 @@ void main() {
 }
 //also perfect and  directly printing the list
 // microphone stoping issue in mobile
+
+class AnimatedButton extends StatelessWidget {
+  final VoidCallback onPressed;
+  final String text;
+  final LinearGradient gradient;
+
+  const AnimatedButton({
+    Key? key,
+    required this.onPressed,
+    required this.text,
+    required this.gradient,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 1000),
+      curve: Curves.easeInOut,
+      width: 350,
+      height: 65,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        gradient: gradient,
+      ),
+      child: MaterialButton(
+        onPressed: onPressed,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Text(
+          text,
+          style: const TextStyle(color: Colors.white,fontSize: 18),
+        ),
+      ),
+    );
+  }
+}

@@ -4,14 +4,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart'; // Import Syncfusion Charts package
 
-class IndividualPrint1 extends StatefulWidget {
+class IndividualPrint extends StatefulWidget {
   final String session;
   final DateTime startDate;
   final DateTime endDate;
   final String docId;
   final String selectedSubject;
 
-  const IndividualPrint1({
+  const IndividualPrint({
     Key? key,
     required this.session,
     required this.startDate,
@@ -21,10 +21,10 @@ class IndividualPrint1 extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<IndividualPrint1> createState() => _IndividualPrint1State();
+  State<IndividualPrint> createState() => _IndividualPrintState();
 }
 
-class _IndividualPrint1State extends State<IndividualPrint1> {
+class _IndividualPrintState extends State<IndividualPrint> {
   String? firstName;
   String? middleName;
   String? lastName;
@@ -242,7 +242,7 @@ class AnimatedButton extends StatelessWidget {
         ),
         child: Text(
           text,
-          style: const TextStyle(color: Colors.white),
+          style: TextStyle(color: Colors.white),
         ),
       ),
     );

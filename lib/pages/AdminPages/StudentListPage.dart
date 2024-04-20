@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:timewise/pages/AdminPages/studentdetailpage.dart';
+import 'package:timewise/pages/report/individual.dart';
+import 'package:timewise/pages/report/individualprint.dart';
 
 class StudentListPage extends StatefulWidget {
   @override
@@ -87,13 +89,13 @@ class _StudentListPageState extends State<StudentListPage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => StudentDetailsPage(
+                            builder: (context) => IndividualReport(
                               docId: docId,
-                              firstName: firstName,
-                              middleName: middleName,
-                              lastName: lastName,
-                              email: email,
-                              role: role,
+                              // firstName: firstName,
+                              // middleName: middleName,
+                              // lastName: lastName,
+                              // email: email,
+                              // role: role,
                             ),
                           ),
                         );

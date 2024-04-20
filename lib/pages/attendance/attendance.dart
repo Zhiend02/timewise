@@ -146,7 +146,9 @@ class _AttendanceState extends State<Attendance> {
                 decoration: const InputDecoration(
                   hintText: 'Select Lecture Type',
                   border: InputBorder.none,
+
                 ),
+
                 value: lectureType,
                 hint: const Text('Select Lecture Type'),
                 onChanged: isLectureTypeEnabled()
@@ -214,7 +216,7 @@ class _AttendanceState extends State<Attendance> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  ElevatedButton(
+                  AnimatedButton1(
 
                     onPressed: () async {
                       final DateTime? pickedDate = await showDatePicker(
@@ -229,14 +231,16 @@ class _AttendanceState extends State<Attendance> {
                         });
                       }
                     },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor:const Color.fromRGBO(51, 172, 73,1),
-                      padding: const EdgeInsets.symmetric(vertical: 10.0,horizontal: 20.0),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
+                    gradient:const LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        Color.fromRGBO(9, 198, 249, 1),
+                        Color.fromRGBO(4, 93, 233, 1),
+                      ],
                     ),
-                    child: const Text('Select Date',style: TextStyle(color: Colors.black,),),
+
+                    text:'Select Date',
                   ),
                 ],
               ),
@@ -255,7 +259,7 @@ class _AttendanceState extends State<Attendance> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  ElevatedButton(
+                  AnimatedButton1(
                     onPressed: () async {
                       final TimeOfDay? pickedTime = await showTimePicker(
                         context: context,
@@ -267,15 +271,17 @@ class _AttendanceState extends State<Attendance> {
                         });
                       }
                     },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor:const Color.fromRGBO(51, 172, 73,1),
-                      padding: const EdgeInsets.symmetric(vertical: 10.0,horizontal: 20.0),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
+                      gradient:const LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          Color.fromRGBO(9, 198, 249, 1),
+                          Color.fromRGBO(4, 93, 233, 1),
+                        ],
                       ),
-                    ),
-                    child: const Text('Select Time',style: TextStyle(color: Colors.black),),
+                     text:'Select Time'
                   ),
+
                 ],
               ),
             ),
@@ -311,23 +317,19 @@ class _AttendanceState extends State<Attendance> {
 
             const SizedBox(height: 20),
 
-            ElevatedButton(
-              onPressed: (buttonColor == Colors.grey) ? null : takeAttendance,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: buttonColor,
-                padding: const EdgeInsets.symmetric(vertical: 12.0),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
+            AnimatedButton(
+              onPressed: (buttonColor == Colors.grey) ? (){} : takeAttendance,
+
+              gradient:const LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Color.fromRGBO(100, 226, 98, 1.0),
+                  Color.fromRGBO(	4, 172, 42, 1.0),
+                ],
               ),
-              child: const Text(
-                'Take Attendance',
-                style: TextStyle(
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black
-                ),
-              ),
+                text:'Take Attendance',
+
             ),
           ],
         ),
@@ -398,5 +400,80 @@ class _AttendanceState extends State<Attendance> {
       }
     }
     return items;
+  }
+}
+
+
+class AnimatedButton extends StatelessWidget {
+  final VoidCallback onPressed;
+  final String text;
+  final LinearGradient gradient;
+
+  const AnimatedButton({
+    Key? key,
+    required this.onPressed,
+    required this.text,
+    required this.gradient,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 1000),
+      curve: Curves.easeInOut,
+      width: 350,
+      height: 65,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        gradient: gradient,
+      ),
+      child: MaterialButton(
+        onPressed: onPressed,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Text(
+          text,
+          style: const TextStyle(color: Colors.white),
+        ),
+      ),
+    );
+  }
+}
+
+class AnimatedButton1 extends StatelessWidget {
+  final VoidCallback onPressed;
+  final String text;
+  final LinearGradient gradient;
+
+  const AnimatedButton1({
+    Key? key,
+    required this.onPressed,
+    required this.text,
+    required this.gradient,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 1000),
+      curve: Curves.easeInOut,
+      width: 130,
+      height: 55,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        gradient: gradient,
+      ),
+      child: MaterialButton(
+        onPressed: onPressed,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Text(
+          text,
+          style: const TextStyle(color: Colors.white),
+        ),
+      ),
+    );
   }
 }

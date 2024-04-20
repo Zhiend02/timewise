@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -50,7 +51,7 @@ class _PrintDataState extends State<PrintData> {
 
       int numDocuments = querySnapshot.size; // Number of documents found in the date range
 
-      print('Number of Documents: $numDocuments');
+      // print('Number of Documents: $numDocuments');
 
       if (numDocuments == 0) {
         print('No documents found within the specified date range.');
@@ -182,8 +183,7 @@ class _PrintDataState extends State<PrintData> {
         List<dynamic> attendanceValues = studentDataMap[fullName]!;
         int totalPresent =
         attendanceValues.reduce((sum, value) => sum + value); // Calculate total present days
-        double attendancePercentage =
-            (totalPresent / numDocuments) * 100; // Calculate attendance percentage
+        double attendancePercentage = (totalPresent / numDocuments) * 100; // Calculate attendance percentage
         List<dynamic> row = [
           fullName,
           ...attendanceValues,
@@ -201,28 +201,55 @@ class _PrintDataState extends State<PrintData> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Print Data Details'),
+      backgroundColor: CupertinoColors.systemGrey5,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(kToolbarHeight + 15.0),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            gradient: const LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Color.fromRGBO(9, 198, 249, 1),
+                Color.fromRGBO(4, 93, 233, 1),
+              ],
+            ),
+          ),
+          child: AppBar(
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            title: const Text('Download Defaulter'),
+          ),
+        ),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('Session: ${widget.session}'),
+            Text('Session: ${widget.session}',style: TextStyle(fontSize: 18),),
             Text(
-                'Start Date: ${DateFormat('yyyy-MM-dd').format(widget.startDate)}'),
+                'Start Date: ${DateFormat('yyyy-MM-dd').format(widget.startDate)}',style: TextStyle(fontSize: 18)),
             Text(
-                'End Date: ${DateFormat('yyyy-MM-dd').format(widget.endDate)}'),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                _printAttendanceData();
-              },
-              child: Text('Print Attendance Data'),
-            ),
-            ElevatedButton(
+                'End Date: ${DateFormat('yyyy-MM-dd').format(widget.endDate)}',style: TextStyle(fontSize: 18)),
+           const  SizedBox(height: 20),
+            // ElevatedButton(
+            //   onPressed: () {
+            //     _printAttendanceData();
+            //   },
+            //   child: const Text('Print Attendance Data'),
+            // ),
+            AnimatedButton(
               onPressed: _downloadCSV,
-              child: Text('Download CSV'),
+              gradient:const LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Color.fromRGBO(100, 226, 98, 1.0),
+                  Color.fromRGBO(	4, 172, 42, 1.0),
+                ],
+              ),
+              text:('Download CSV'),
             ),
           ],
         ),
@@ -236,11 +263,46 @@ class _PrintDataState extends State<PrintData> {
 
     // Show a snackbar indicating the CSV file download
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
+      const SnackBar(
         content:
         Text('CSV file downloaded to system\'s downloads folder.'),
       ),
     );
   }
 }
-//another perfect
+class AnimatedButton extends StatelessWidget {
+  final VoidCallback onPressed;
+  final String text;
+  final LinearGradient gradient;
+
+  const AnimatedButton({
+    Key? key,
+    required this.onPressed,
+    required this.text,
+    required this.gradient,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 1000),
+      curve: Curves.easeInOut,
+      width: 350,
+      height: 65,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        gradient: gradient,
+      ),
+      child: MaterialButton(
+        onPressed: onPressed,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Text(
+          text,
+          style: const TextStyle(color: Colors.white),
+        ),
+      ),
+    );
+  }
+}

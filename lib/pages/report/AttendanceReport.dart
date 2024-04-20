@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../attendance/print.dart';
+import 'print.dart';
 
 class AttendanceReport extends StatefulWidget {
   const AttendanceReport({Key? key}) : super(key: key);
@@ -51,7 +51,7 @@ class _AttendanceReportState extends State<AttendanceReport> {
           child: AppBar(
             backgroundColor: Colors.transparent,
             elevation: 0,
-            title: const Text('Print Data'),
+            title: const Text('Select Data'),
           ),
         ),
       ),
@@ -61,7 +61,7 @@ class _AttendanceReportState extends State<AttendanceReport> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               DropdownButtonFormField<String>(
                 decoration: InputDecoration(
                   filled: true,
@@ -70,7 +70,11 @@ class _AttendanceReportState extends State<AttendanceReport> {
                   border: InputBorder.none,
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(color: Colors.transparent),
+                    borderSide: const BorderSide(color: Colors.transparent),
+                  ),
+                  focusedBorder: OutlineInputBorder( // Border for focused state
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(color: Colors.white),
                   ),
                 ),
                 value: selectedSession,
@@ -88,12 +92,12 @@ class _AttendanceReportState extends State<AttendanceReport> {
                   );
                 }).toList(),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Text('Start Date: ${DateFormat('yyyy-MM-dd').format(startDate)}'),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 10.0),
-                child: ElevatedButton(
+                child: AnimatedButton(
                   onPressed: () async {
                     final pickedDate = await showDatePicker(
                       context: context,
@@ -107,29 +111,26 @@ class _AttendanceReportState extends State<AttendanceReport> {
                       });
                     }
                   },
-                  style: ElevatedButton.styleFrom(
-                    primary: const Color.fromRGBO(51, 172, 73, 1),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    fixedSize: Size(double.infinity, 60),
+
+                  gradient:const LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      Color.fromRGBO(9, 198, 249, 1),
+                      Color.fromRGBO(4, 93, 233, 1),
+                    ],
                   ),
-                  child: const SizedBox(
-                    width: double.infinity,
-                    child: Text(
-                      'Select Start Date',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
+                   text: 'Select Start Date',
+
+
                 ),
               ),
-              SizedBox(height: 30),
+              const SizedBox(height: 30),
               Text('End Date: ${DateFormat('yyyy-MM-dd').format(endDate)}'),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 10.0),
-                child: ElevatedButton(
+                child: AnimatedButton(
                   onPressed: () async {
                     final pickedDate = await showDatePicker(
                       context: context,
@@ -143,50 +144,77 @@ class _AttendanceReportState extends State<AttendanceReport> {
                       });
                     }
                   },
-                  style: ElevatedButton.styleFrom(
-                    primary: const Color.fromRGBO(51, 172, 73, 1),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    fixedSize: const Size(double.infinity, 60),
+                  gradient:const LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      Color.fromRGBO(9, 198, 249, 1),
+                      Color.fromRGBO(4, 93, 233, 1),
+                    ],
                   ),
-                  child: const SizedBox(
-                    width: double.infinity,
-                    child: Text(
-                      'Select End Date',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
+                      text: 'Select End Date',
+
                 ),
               ),
               const SizedBox(height: 40),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 10.0),
-                child: ElevatedButton(
+                child: AnimatedButton(
                   onPressed: () {
                     _printData(context);
                   },
-                  style: ElevatedButton.styleFrom(
-                    primary: const Color.fromRGBO(51, 172, 73, 1),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    fixedSize: Size(double.infinity, 60),
+                  gradient:const LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      Color.fromRGBO(100, 226, 98, 1.0),
+                      Color.fromRGBO(	4, 172, 42, 1.0),
+                    ],
                   ),
-                  child: const SizedBox(
-                    width: double.infinity,
-                    child: Text(
-                      'Print Data',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
+                  text: 'Print Data',
                 ),
               ),
               const SizedBox(height: 20),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+
+class AnimatedButton extends StatelessWidget {
+  final VoidCallback onPressed;
+  final String text;
+  final LinearGradient gradient;
+
+  const AnimatedButton({
+    Key? key,
+    required this.onPressed,
+    required this.text,
+    required this.gradient,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 1000),
+      curve: Curves.easeInOut,
+      width: 350,
+      height: 65,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        gradient: gradient,
+      ),
+      child: MaterialButton(
+        onPressed: onPressed,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Text(
+          text,
+          style: const TextStyle(color: Colors.white),
         ),
       ),
     );

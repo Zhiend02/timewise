@@ -1,20 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-import 'client_screen.dart'; // Import SharedPreferences
+import 'individualprint.dart';
 
+class IndividualReport extends StatefulWidget {
+  final String docId;
 
-
-class IndividualReport1 extends StatefulWidget {
-  const IndividualReport1({Key? key}) : super(key: key);
+  const IndividualReport({Key? key, required this.docId}) : super(key: key);
 
   @override
-  _IndividualReport1State createState() => _IndividualReport1State();
+  _IndividualReportState createState() => _IndividualReportState();
 }
 
-class _IndividualReport1State extends State<IndividualReport1> {
+class _IndividualReportState extends State<IndividualReport> {
   String selectedSession = 'Odd';
   DateTime startDate = DateTime.now();
   DateTime endDate = DateTime.now();
@@ -43,32 +42,16 @@ class _IndividualReport1State extends State<IndividualReport1> {
     'DBMS Lab'
   ];
 
-  String? docId; // Variable to store docId
-
-  @override
-  void initState() {
-    super.initState();
-    _fetchDocId();
-    print(docId);// Fetch docId during initialization
-  }
-
-  Future<void> _fetchDocId() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      docId = prefs.getString('userId'); // Fetch docId from SharedPreferences
-    });
-  }
-
   Future<void> _IndividualPrint(BuildContext context) async {
-    if (selectedSubject != null && docId != null) {
+    if (selectedSubject != null) {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => IndividualPrint1(
+          builder: (context) => IndividualPrint(
             session: selectedSession,
             startDate: startDate,
             endDate: endDate,
-            docId: docId!,
+            docId: widget.docId,
             selectedSubject: selectedSubject!,
           ),
         ),
@@ -76,7 +59,7 @@ class _IndividualReport1State extends State<IndividualReport1> {
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Please select a subject and ensure docId is available.'),
+          content: Text('Please select a subject.'),
         ),
       );
     }
@@ -167,6 +150,7 @@ class _IndividualReport1State extends State<IndividualReport1> {
                         borderRadius: BorderRadius.circular(12),
                         borderSide: const BorderSide(color: Colors.white),
                       ),
+
                     ),
                     items: selectedSession == 'Odd'
                         ? oddSubjects.map((subject) {
@@ -211,6 +195,8 @@ class _IndividualReport1State extends State<IndividualReport1> {
                     ],
                   ),
                   text: 'Select Start Date',
+
+
                 ),
               ),
               const SizedBox(height: 30),
@@ -240,7 +226,7 @@ class _IndividualReport1State extends State<IndividualReport1> {
                       Color.fromRGBO(4, 93, 233, 1),
                     ],
                   ),
-                  text: 'Select End Date',
+                   text: 'Select End Date',
                 ),
               ),
               const SizedBox(height: 40),
@@ -255,7 +241,7 @@ class _IndividualReport1State extends State<IndividualReport1> {
                     end: Alignment.bottomRight,
                     colors: [
                       Color.fromRGBO(100, 226, 98, 1.0),
-                      Color.fromRGBO(4, 172, 42, 1.0),
+                      Color.fromRGBO(	4, 172, 42, 1.0),
                     ],
                   ),
                   text: 'Print Data',
@@ -300,7 +286,7 @@ class AnimatedButton extends StatelessWidget {
         ),
         child: Text(
           text,
-          style: const TextStyle(color: Colors.white, fontSize: 18),
+          style: const TextStyle(color: Colors.white,fontSize: 18),
         ),
       ),
     );

@@ -74,6 +74,8 @@ dependencies:
   english_words: ^4.0.0
   audio_wave: ^0.1.5
   wifi_iot: ^0.3.19
+  fl_chart: ^0.67.0
+  syncfusion_flutter_charts: ^25.1.40
 
   #chatting
 

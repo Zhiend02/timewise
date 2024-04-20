@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timewise/pages/AdminPages/StudentListPage.dart';
 import 'package:timewise/pages/AdminPages/teacherlistpage.dart';
 import 'package:timewise/pages/Student/calender.dart';
-import 'package:timewise/pages/Teacher/AttendanceReport.dart';
+import 'package:timewise/pages/report/AttendanceReport.dart';
 import 'package:easy_date_timeline/easy_date_timeline.dart';
 import 'package:timewise/pages/chatting/screens/splash_page.dart';
 import 'package:timewise/pages/loginpage/register.dart';
@@ -191,7 +191,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
             const SizedBox(width: 40),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 18.0,horizontal: 10),
+                padding: const EdgeInsets.symmetric(vertical: 15.0,horizontal: 10),
                 child: Text(
                   title,
                   style: const TextStyle(fontSize: 20,fontWeight:FontWeight.w600 ),
